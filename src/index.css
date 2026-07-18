@@ -1,31 +1,43 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-50: #eff9ff;
-  --color-brand-100: #def2ff;
-  --color-brand-200: #b6e7ff;
-  --color-brand-300: #75d4ff;
-  --color-brand-400: #2cbeff;
-  --color-brand-500: #06a6f0;
-  --color-brand-600: #0084cd;
-  --color-brand-700: #0069a6;
-  --color-brand-800: #045989;
-  --color-brand-900: #0a4a71;
+  /* Neutrals — app chrome */
+  --color-background: #f5f7f8; /* page/app background, sits behind every surface */
+  --color-surface: #ffffff; /* cards, modals, dropdowns, inputs — elevated above the background */
+  --color-foreground: #0a6847; /* headings, nav/brand text, icons — darkest green doubling as primary text */
+  --color-muted: #6b7280; /* body copy, secondary text, placeholders, disabled state, dividers */
+
+  /* Brand green — primary actions, links, positive/success states */
+  --color-primary: #0a6847; /* primary buttons, links, active nav, brand mark */
+  --color-primary-hover: #467235; /* hover/pressed state for primary buttons and links */
+  --color-primary-subtle: #7aba78; /* success badges (open/accepted/completed), positive backgrounds, progress fills */
+
+  /* Yellow — attention, in-progress, highlights */
+  --color-highlight-soft: #fff78d; /* subtle highlight backgrounds — hover rows, info banners */
+  --color-highlight-muted: #f6e9b2; /* soft badge/tag backgrounds, code/inline highlight fills */
+  --color-highlight: #fcde70; /* pending/reviewing status badges, in-progress indicators */
+  --color-highlight-strong: #ffbf00; /* star ratings, high-visibility accents, secondary CTA */
+
+  /* Orange — caution, needs attention but not an error */
+  --color-caution: #e8b86d; /* warning banners, "under review" states, softer than danger red */
+
+  /* Red — errors, destructive actions */
+  --color-danger: #d90000; /* validation errors, destructive actions (reject/withdraw/delete), closed/rejected badges */
 
   --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
   --font-mono: ui-monospace, Consolas, monospace;
 }
 
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
+  --text: var(--color-muted);
+  --text-h: var(--color-foreground);
+  --bg: var(--color-background);
+  --border: rgba(107, 114, 128, 0.25);
+  --code-bg: var(--color-highlight-muted);
+  --accent: var(--color-primary);
+  --accent-bg: rgba(10, 104, 71, 0.1);
+  --accent-border: rgba(10, 104, 71, 0.5);
+  --social-bg: rgba(245, 247, 248, 0.6);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
@@ -55,9 +67,9 @@
     --bg: #16171d;
     --border: #2e303a;
     --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
+    --accent: var(--color-primary-subtle);
+    --accent-bg: rgba(122, 186, 120, 0.15);
+    --accent-border: rgba(122, 186, 120, 0.5);
     --social-bg: rgba(47, 48, 58, 0.5);
     --shadow:
       rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
