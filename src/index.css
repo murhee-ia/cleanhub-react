@@ -1,3 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #eff9ff;
+  --color-brand-100: #def2ff;
+  --color-brand-200: #b6e7ff;
+  --color-brand-300: #75d4ff;
+  --color-brand-400: #2cbeff;
+  --color-brand-500: #06a6f0;
+  --color-brand-600: #0084cd;
+  --color-brand-700: #0069a6;
+  --color-brand-800: #045989;
+  --color-brand-900: #0a4a71;
+
+  --font-sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+}
+
 :root {
   --text: #6b6375;
   --text-h: #08060d;
@@ -55,15 +73,9 @@ body {
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
 }
 
 h1,
