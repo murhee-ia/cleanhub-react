@@ -24,6 +24,9 @@ dist-ssr
 *.sln
 *.sw?
 
+
+# AI tooling (Claude Code)
+/.claude
 /CONTRIBUTING.md
 /CLAUDE.md
 /ROADMAP.md
