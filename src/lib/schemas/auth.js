@@ -6,7 +6,7 @@ export const loginSchema = z.object({
 })
 
 // Self-registration is limited to cleaner/employer — moderator/admin accounts
-// are never created through the public UI (see root CLAUDE.md).
+// are never created through the public UI.
 export const registerSchema = z
   .object({
     name: z.string().min(1, 'Name is required').max(255),

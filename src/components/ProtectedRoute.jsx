@@ -1,8 +1,7 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 
-// UX-only guard. The backend policies are the real authorization gate
-// (see root CLAUDE.md) — never rely on this alone to protect a mutation.
+// UX-only guard. The backend policies are the real authorization gate.
 export default function ProtectedRoute({ roles }) {
   const { isAuthenticated, isLoading, user } = useAuth()
   const location = useLocation()

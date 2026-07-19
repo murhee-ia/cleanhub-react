@@ -14,9 +14,7 @@ function readStoredUser() {
   }
 }
 
-// The backend exposes no current-user endpoint, so the session (token + user
-// from the login/register response) is persisted to localStorage and rehydrated
-// on load. Both register and login return { token, user }.
+// Both register and login return { token, user }.
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY))
   const [user, setUser] = useState(readStoredUser)

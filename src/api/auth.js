@@ -1,7 +1,7 @@
 import api from './client'
 
-// Endpoints and shapes per the confirmed backend Sync-point contract
-// (cleanhub-laravel Phase 1). register/login return { token, user }.
+// Endpoints and shapes per the confirmed backend API.
+// Register/login return { token, user }.
 // There is no current-user endpoint — the SPA hydrates the user from
 // localStorage (see AuthProvider). Email verification links are opened
 // directly from the email, not called from here.
