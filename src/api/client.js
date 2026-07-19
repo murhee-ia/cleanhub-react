@@ -10,4 +10,19 @@ api.interceptors.request.use((config) => {
   return config
 })
 
+// On an expired/invalid token, drop it and bounce to login. This handler is
+// contract-independent (status code only); it does not parse the response body.
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem('access_token')
+      if (!window.location.pathname.startsWith('/login')) {
+        window.location.assign('/login')
+      }
+    }
+    return Promise.reject(error)
+  },
+)
+
 export default api
