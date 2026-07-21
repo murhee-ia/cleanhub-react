@@ -11,6 +11,8 @@ import JobsPage from './pages/JobsPage'
 import PlaceholderPage from './pages/PlaceholderPage'
 import NotFoundPage from './pages/NotFoundPage'
 import NotAllowedPage from './pages/NotAllowedPage'
+import ProfileViewPage from './pages/ProfileViewPage'
+import OwnProfilePage from './pages/OwnProfilePage'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
 import VerifyEmailPage from './pages/auth/VerifyEmailPage'
@@ -25,6 +27,15 @@ export const router = createBrowserRouter([
       { path: '/', element: <HomePage /> },
       { path: '/jobs', element: <JobsPage /> },
       { path: '/not-allowed', element: <NotAllowedPage /> },
+
+      // Any authenticated user can view another user's profile.
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { path: '/cleaners/:id', element: <ProfileViewPage role="cleaner" /> },
+          { path: '/employers/:id', element: <ProfileViewPage role="employer" /> },
+        ],
+      },
 
       // Auth (centered card frame)
       {
@@ -45,7 +56,10 @@ export const router = createBrowserRouter([
         children: [
           {
             element: <CleanerLayout />,
-            children: [{ index: true, element: <PlaceholderPage title="Cleaner dashboard" /> }],
+            children: [
+              { index: true, element: <PlaceholderPage title="Cleaner dashboard" /> },
+              { path: 'profile', element: <OwnProfilePage /> },
+            ],
           },
         ],
       },
@@ -55,7 +69,10 @@ export const router = createBrowserRouter([
         children: [
           {
             element: <EmployerLayout />,
-            children: [{ index: true, element: <PlaceholderPage title="Employer dashboard" /> }],
+            children: [
+              { index: true, element: <PlaceholderPage title="Employer dashboard" /> },
+              { path: 'profile', element: <OwnProfilePage /> },
+            ],
           },
         ],
       },
