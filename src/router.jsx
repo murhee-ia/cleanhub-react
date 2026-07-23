@@ -14,6 +14,8 @@ import NotFoundPage from './pages/NotFoundPage'
 import NotAllowedPage from './pages/NotAllowedPage'
 import ProfileViewPage from './pages/ProfileViewPage'
 import OwnProfilePage from './pages/OwnProfilePage'
+import MyJobsPage from './pages/MyJobsPage'
+import JobCreatePage from './pages/JobCreatePage'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
 import VerifyEmailPage from './pages/auth/VerifyEmailPage'
@@ -74,6 +76,8 @@ export const router = createBrowserRouter([
             children: [
               { index: true, element: <PlaceholderPage title="Employer dashboard" /> },
               { path: 'profile', element: <OwnProfilePage /> },
+              { path: 'jobs', element: <MyJobsPage /> },
+              { path: 'jobs/new', element: <JobCreatePage /> },
             ],
           },
         ],
