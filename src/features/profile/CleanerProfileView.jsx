@@ -1,5 +1,5 @@
 import { MapPin } from 'lucide-react'
-import RatingSummary from './RatingSummary'
+import RatingSummary from '../../components/RatingSummary'
 import DocumentList from './DocumentList'
 import { Avatar, Stat, Section, TagList, ProfileShell } from './ProfileLayout'
 
