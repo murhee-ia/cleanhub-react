@@ -8,6 +8,7 @@ import AdminLayout from './layouts/AdminLayout'
 import ProtectedRoute from './components/ProtectedRoute'
 import HomePage from './pages/HomePage'
 import JobsPage from './pages/JobsPage'
+import JobDetailPage from './pages/JobDetailPage'
 import PlaceholderPage from './pages/PlaceholderPage'
 import NotFoundPage from './pages/NotFoundPage'
 import NotAllowedPage from './pages/NotAllowedPage'
@@ -26,6 +27,7 @@ export const router = createBrowserRouter([
       // Public
       { path: '/', element: <HomePage /> },
       { path: '/jobs', element: <JobsPage /> },
+      { path: '/jobs/:id', element: <JobDetailPage /> },
       { path: '/not-allowed', element: <NotAllowedPage /> },
 
       // Any authenticated user can view another user's profile.
