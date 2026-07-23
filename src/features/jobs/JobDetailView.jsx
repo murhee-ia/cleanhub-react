@@ -5,17 +5,8 @@ import WashiTape from '../../components/WashiTape'
 import Button from '../../components/Button'
 import RatingSummary from '../../components/RatingSummary'
 import { useAuth } from '../../hooks/useAuth'
+import { formatDate } from '../../lib/helpers/datetime'
 import JobStatusBadge from './JobStatusBadge'
-
-function formatDate(iso) {
-  if (!iso) return null
-  const [year, month, day] = iso.split('-').map(Number)
-  return new Date(year, month - 1, day).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
 
 function Fact({ icon: Icon, label, children }) {
   return (

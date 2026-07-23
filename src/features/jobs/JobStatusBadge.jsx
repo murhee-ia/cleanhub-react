@@ -1,3 +1,5 @@
+import Badge from '../../components/Badge'
+
 const STATUS_STYLES = {
   open: 'bg-primary-subtle text-white',
   reviewing: 'bg-highlight text-foreground',
@@ -8,10 +10,5 @@ const STATUS_STYLES = {
 
 export default function JobStatusBadge({ status }) {
   if (!status) return null
-  const style = STATUS_STYLES[status] ?? 'bg-highlight-muted text-foreground'
-  return (
-    <span className={`inline-block rounded-full px-3 py-1 text-sm font-medium capitalize ${style}`}>
-      {status}
-    </span>
-  )
+  return <Badge className={STATUS_STYLES[status] ?? 'bg-highlight-muted text-foreground'}>{status}</Badge>
 }
