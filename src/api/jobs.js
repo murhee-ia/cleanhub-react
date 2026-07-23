@@ -4,13 +4,43 @@ export const jobKeys = {
   all: ['jobs'],
   lists: () => [...jobKeys.all, 'list'],
   list: (filters) => [...jobKeys.lists(), filters],
+  mine: () => [...jobKeys.all, 'mine'],
+  mineList: (filters) => [...jobKeys.mine(), filters],
+  employer: (employerId) => [...jobKeys.all, 'employer', employerId],
+  employerList: (employerId, filters) => [...jobKeys.employer(employerId), filters],
   details: () => [...jobKeys.all, 'detail'],
   detail: (id) => [...jobKeys.details(), id],
+}
+
+// Public browse — published + open posts. Returns the paginated envelope
+// { data, links, meta }. `params` are the search/filter/sort query params.
+export async function getJobs(params) {
+  const { data } = await api.get('/cleaning-job-posts', { params })
+  return data
+}
+
+// Employer's own posts (every visibility/status), same paginated envelope.
+export async function getMyJobs(params) {
+  const { data } = await api.get('/cleaning-job-posts/mine', { params })
+  return data
+}
+
+// An employer's public job history (published, non-removed), auth-only.
+// `employerId` is the employer's user id. Same paginated envelope, newest-first.
+export async function getEmployerJobs(employerId, params) {
+  const { data } = await api.get(`/employers/${employerId}/cleaning-job-posts`, { params })
+  return data
 }
 
 // Single job post. Guest-accessible for published + non-removed posts; the
 // owning employer additionally sees their own post in any visibility/status.
 export async function getJob(id) {
   const { data } = await api.get(`/cleaning-job-posts/${id}`)
+  return data
+}
+
+// Create a post (employer-only). Pass FormData when sending media.
+export async function createJob(payload) {
+  const { data } = await api.post('/cleaning-job-posts', payload)
   return data
 }
