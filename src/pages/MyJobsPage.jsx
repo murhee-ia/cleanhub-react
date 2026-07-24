@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { getMyJobs, jobKeys } from '../api/jobs'
-import JobCard from '../features/jobs/JobCard'
+import JobList from '../features/jobs/JobList'
 import Pagination from '../components/Pagination'
 
 export default function MyJobsPage() {
@@ -39,19 +39,12 @@ export default function MyJobsPage() {
       </div>
 
       <div className="mt-8">
-        {isPending ? (
-          <p className="text-muted">Loading your job posts…</p>
-        ) : isError ? (
-          <p className="text-danger">Something went wrong loading your job posts.</p>
-        ) : jobs.length === 0 ? (
-          <p className="text-muted">You haven’t posted any jobs yet.</p>
-        ) : (
-          <div className="grid gap-4 md:grid-cols-2">
-            {jobs.map((job) => (
-              <JobCard key={job.id} job={job} showVisibility />
-            ))}
-          </div>
-        )}
+        <JobList
+          isPending={isPending}
+          isError={isError}
+          jobs={jobs}
+          emptyMessage="You haven’t posted any jobs yet."
+        />
       </div>
 
       {meta && (
