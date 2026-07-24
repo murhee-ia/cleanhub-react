@@ -4,9 +4,8 @@ import PaperCard from '../../components/PaperCard'
 import RatingSummary from '../../components/RatingSummary'
 import { formatDate } from '../../lib/helpers/datetime'
 import JobStatusBadge from './JobStatusBadge'
-import JobVisibilityBadge from './JobVisibilityBadge'
 
-export default function JobCard({ job, showVisibility = false }) {
+export default function JobCard({ job, showEmployer = true }) {
   const location = [job.city, job.country].filter(Boolean).join(', ')
   return (
     <PaperCard className="p-5">
@@ -17,7 +16,6 @@ export default function JobCard({ job, showVisibility = false }) {
           </span>
         )}
         <JobStatusBadge status={job.status} />
-        {showVisibility && <JobVisibilityBadge visibility={job.visibility} />}
       </div>
 
       <h3 className="mt-2 font-serif text-xl text-foreground">
@@ -47,7 +45,11 @@ export default function JobCard({ job, showVisibility = false }) {
         )}
       </div>
 
-      {job.employer && (
+      {job.description && (
+        <p className="mt-2 line-clamp-2 text-sm text-muted">{job.description}</p>
+      )}
+
+      {showEmployer && job.employer && (
         <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm">
           <span className="text-foreground">{job.employer.name}</span>
           <RatingSummary average={job.employer.rating_average} count={job.employer.rating_count} />
