@@ -15,6 +15,7 @@ import NotAllowedPage from './pages/NotAllowedPage'
 import ProfileViewPage from './pages/ProfileViewPage'
 import OwnProfilePage from './pages/OwnProfilePage'
 import MyJobsPage from './pages/MyJobsPage'
+import SavedJobsPage from './pages/SavedJobsPage'
 import JobCreatePage from './pages/JobCreatePage'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
@@ -63,6 +64,7 @@ export const router = createBrowserRouter([
             children: [
               // A cleaner's home is the job feed (browse/search/filter).
               { index: true, element: <JobsPage /> },
+              { path: 'saved-jobs', element: <SavedJobsPage /> },
               { path: 'profile', element: <OwnProfilePage /> },
             ],
           },
