@@ -6,7 +6,6 @@ import SelectField from '../../components/SelectField'
 const SORT_OPTIONS = [
   { value: 'newest', label: 'Newest' },
   { value: 'soonest', label: 'Starting soonest' },
-  { value: 'high_pay', label: 'Highest pay' },
   { value: 'top_employer', label: 'Top-rated employer' },
 ]
 
