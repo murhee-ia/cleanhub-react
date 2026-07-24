@@ -1,5 +1,6 @@
 import { MapPin } from 'lucide-react'
-import RatingSummary from './RatingSummary'
+import RatingSummary from '../../components/RatingSummary'
+import EmployerJobsSection from '../jobs/EmployerJobsSection'
 import DocumentList from './DocumentList'
 import { Avatar, Stat, Section, ProfileShell } from './ProfileLayout'
 
@@ -55,6 +56,9 @@ export default function EmployerProfileView({ profile }) {
       )}
       <Section title="Documents">
         <DocumentList documents={profile.documents} />
+      </Section>
+      <Section title="Job posts">
+        <EmployerJobsSection employerId={profile.user_id} />
       </Section>
     </ProfileShell>
   )

@@ -8,11 +8,14 @@ import AdminLayout from './layouts/AdminLayout'
 import ProtectedRoute from './components/ProtectedRoute'
 import HomePage from './pages/HomePage'
 import JobsPage from './pages/JobsPage'
+import JobDetailPage from './pages/JobDetailPage'
 import PlaceholderPage from './pages/PlaceholderPage'
 import NotFoundPage from './pages/NotFoundPage'
 import NotAllowedPage from './pages/NotAllowedPage'
 import ProfileViewPage from './pages/ProfileViewPage'
 import OwnProfilePage from './pages/OwnProfilePage'
+import MyJobsPage from './pages/MyJobsPage'
+import JobCreatePage from './pages/JobCreatePage'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
 import VerifyEmailPage from './pages/auth/VerifyEmailPage'
@@ -26,6 +29,7 @@ export const router = createBrowserRouter([
       // Public
       { path: '/', element: <HomePage /> },
       { path: '/jobs', element: <JobsPage /> },
+      { path: '/jobs/:id', element: <JobDetailPage /> },
       { path: '/not-allowed', element: <NotAllowedPage /> },
 
       // Any authenticated user can view another user's profile.
@@ -57,7 +61,8 @@ export const router = createBrowserRouter([
           {
             element: <CleanerLayout />,
             children: [
-              { index: true, element: <PlaceholderPage title="Cleaner dashboard" /> },
+              // A cleaner's home is the job feed (browse/search/filter).
+              { index: true, element: <JobsPage /> },
               { path: 'profile', element: <OwnProfilePage /> },
             ],
           },
@@ -72,6 +77,8 @@ export const router = createBrowserRouter([
             children: [
               { index: true, element: <PlaceholderPage title="Employer dashboard" /> },
               { path: 'profile', element: <OwnProfilePage /> },
+              { path: 'jobs', element: <MyJobsPage /> },
+              { path: 'jobs/new', element: <JobCreatePage /> },
             ],
           },
         ],
