@@ -61,7 +61,8 @@ export const router = createBrowserRouter([
           {
             element: <CleanerLayout />,
             children: [
-              { index: true, element: <PlaceholderPage title="Cleaner dashboard" /> },
+              // A cleaner's home is the job feed (browse/search/filter).
+              { index: true, element: <JobsPage /> },
               { path: 'profile', element: <OwnProfilePage /> },
             ],
           },
