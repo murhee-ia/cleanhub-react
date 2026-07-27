@@ -7,6 +7,7 @@ import RatingSummary from '../../components/RatingSummary'
 import { useAuth } from '../../hooks/useAuth'
 import { formatDate } from '../../lib/helpers/datetime'
 import JobStatusBadge from './JobStatusBadge'
+import SaveJobButton from './SaveJobButton'
 
 function Fact({ icon: Icon, label, children }) {
   return (
@@ -144,6 +145,10 @@ export default function JobDetailView({ job }) {
                 Apply
               </Button>
             ))}
+
+          {(job.status === 'open' || job.is_saved) && (
+            <SaveJobButton job={job} withLabel className="w-full" />
+          )}
         </aside>
       </div>
     </PaperCard>

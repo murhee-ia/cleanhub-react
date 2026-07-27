@@ -4,6 +4,7 @@ import PaperCard from '../../components/PaperCard'
 import RatingSummary from '../../components/RatingSummary'
 import { formatDate } from '../../lib/helpers/datetime'
 import JobStatusBadge from './JobStatusBadge'
+import SaveJobButton from './SaveJobButton'
 
 export default function JobCard({ job, showEmployer = true, notice }) {
   const location = [job.city, job.country].filter(Boolean).join(', ')
@@ -15,13 +16,16 @@ export default function JobCard({ job, showEmployer = true, notice }) {
           <span>{notice}</span>
         </div>
       )}
-      <div className="flex flex-wrap items-center gap-2">
-        {job.category?.name && (
-          <span className="rounded-full bg-highlight-muted px-3 py-1 text-sm text-foreground">
-            {job.category.name}
-          </span>
-        )}
-        <JobStatusBadge status={job.status} />
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {job.category?.name && (
+            <span className="rounded-full bg-highlight-muted px-3 py-1 text-sm text-foreground">
+              {job.category.name}
+            </span>
+          )}
+          <JobStatusBadge status={job.status} />
+        </div>
+        <SaveJobButton job={job} className="-mr-2 shrink-0" />
       </div>
 
       <h3 className="mt-2 font-serif text-xl text-foreground">
