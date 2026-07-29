@@ -18,7 +18,7 @@ export default function JobList({
     return <p className="text-muted">{emptyMessage}</p>
   }
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
       {jobs.map((job) =>
         renderCard ? (
           renderCard(job)

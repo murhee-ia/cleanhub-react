@@ -62,7 +62,7 @@ export default function SaveJobButton({ job, withLabel = false, className = '' }
   return (
     <Button
       type="button"
-      variant="ghost"
+      variant={withLabel ? 'ghost' : 'icon'}
       onClick={handleClick}
       disabled={isPending}
       aria-pressed={isAuthenticated ? saved : undefined}
@@ -70,7 +70,7 @@ export default function SaveJobButton({ job, withLabel = false, className = '' }
       title={`${label} job`}
       className={`gap-1.5 ${className}`}
     >
-      <Icon className="size-4 shrink-0" aria-hidden="true" />
+      <Icon className="size-6 shrink-0" aria-hidden="true" />
       {withLabel && label}
     </Button>
   )

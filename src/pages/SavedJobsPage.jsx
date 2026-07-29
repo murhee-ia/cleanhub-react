@@ -30,15 +30,20 @@ export default function SavedJobsPage() {
   }
 
   return (
-    <main className="mx-auto max-w-6xl p-4 sm:p-6">
-      <h1 className="m-0 font-serif text-3xl text-foreground">Saved jobs</h1>
+    <div className="page-content">
+      {/* Breadcrumb */}
+      <p className="page-breadcrumb">CLEANER · SAVED JOBS</p>
 
-      <div className="mt-8">
+      <div className="page-header">
+        <h1>Saved jobs</h1>
+      </div>
+
+      <div className="mt-6">
         <JobList
           isPending={isPending}
           isError={isError}
           jobs={jobs}
-          emptyMessage="You haven’t saved any jobs yet."
+          emptyMessage="You haven't saved any jobs yet."
           renderCard={(job) => (
             <JobCard
               key={job.id}
@@ -58,6 +63,6 @@ export default function SavedJobsPage() {
           />
         </div>
       )}
-    </main>
+    </div>
   )
 }

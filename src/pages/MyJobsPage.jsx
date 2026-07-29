@@ -75,14 +75,35 @@ export default function MyJobsPage() {
     (Boolean(filters.sort) && filters.sort !== 'newest')
 
   return (
-    <main className="mx-auto max-w-6xl p-4 sm:p-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="m-0 font-serif text-3xl text-foreground">My job posts</h1>
+    <div className="page-content">
+      {/* Breadcrumb */}
+      <p className="page-breadcrumb">EMPLOYER · MY JOB POSTS</p>
+
+      <div className="page-header">
+        <h1>My job posts</h1>
         <Link
           to="/employer/jobs/new"
-          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 font-medium text-white transition hover:bg-primary-hover"
+          id="post-job-cta-btn"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontFamily: 'var(--heading)',
+            fontWeight: 700,
+            fontSize: '14px',
+            color: '#ffffff',
+            textDecoration: 'none',
+            background: 'var(--color-primary)',
+            border: '2px solid var(--border)',
+            borderRadius: 'var(--radius)',
+            boxShadow: 'var(--shadow-btn)',
+            padding: '8px 18px',
+            transition: 'box-shadow 0.1s, transform 0.1s',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '1px 1px 0 #1a1a1a'; e.currentTarget.style.transform = 'translate(2px,2px)' }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'var(--shadow-btn)'; e.currentTarget.style.transform = 'none' }}
         >
-          New job post
+          + Post a Job
         </Link>
       </div>
 
@@ -130,6 +151,6 @@ export default function MyJobsPage() {
           />
         </div>
       )}
-    </main>
+    </div>
   )
 }

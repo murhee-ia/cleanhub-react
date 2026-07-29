@@ -1,7 +1,6 @@
+import { Search } from 'lucide-react'
 import { useQuery } from '@tanstack/react-query'
 import { getJobCategories, jobCategoryKeys } from '../../api/jobCategories'
-import TextField from '../../components/TextField'
-import SelectField from '../../components/SelectField'
 
 const SORT_OPTIONS = [
   { value: 'newest', label: 'Newest' },
@@ -9,6 +8,26 @@ const SORT_OPTIONS = [
   { value: 'top_employer', label: 'Top-rated employer' },
 ]
 
+function chipStyle(active) {
+  return {
+    fontFamily: 'var(--heading)',
+    fontWeight: 600,
+    fontSize: '0.75rem',
+    padding: '0.3125rem 0.875rem',
+    borderRadius: 'var(--radius)',
+    border: '2px solid var(--border)',
+    cursor: 'pointer',
+    transition: 'background 0.1s, box-shadow 0.1s',
+    background: active ? 'var(--color-primary)' : 'var(--color-highlight)',
+    color: active ? '#ffffff' : 'var(--color-foreground)',
+    boxShadow: active ? 'var(--shadow-sm)' : 'none',
+  }
+}
+
+/**
+ * JobFilters — horizontal chip-style filter bar.
+ * Search input spans full width; below it: category chips + sort dropdown inline.
+ */
 export default function JobFilters({
   draft,
   onDraftChange,
@@ -24,63 +43,140 @@ export default function JobFilters({
   })
 
   return (
-    <div className="flex flex-col gap-4">
-      <TextField
-        id="job-search"
-        label="Search"
-        placeholder="Title, description, or employer"
-        value={draft.search}
-        onChange={(event) => onDraftChange('search', event.target.value)}
-      />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      {/* Search bar */}
+      <div
+        style={{
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Search
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            left: '0.75rem',
+            width: '1rem',
+            height: '1rem',
+            color: 'var(--color-muted)',
+            flexShrink: 0,
+            pointerEvents: 'none',
+          }}
+        />
+        <input
+          id="job-search"
+          type="search"
+          placeholder="Search jobs…"
+          value={draft.search}
+          onChange={(e) => onDraftChange('search', e.target.value)}
+          className="neo-input"
+          style={{ paddingLeft: '2.375rem' }}
+          aria-label="Search jobs"
+        />
+      </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <SelectField
-          id="job-category"
-          label="Category"
-          value={categoryId}
-          onChange={(event) => onParamChange('category_id', event.target.value)}
+      {/* Filter chip row */}
+      <div
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: '8px',
+        }}
+      >
+        {/* "All" chip */}
+        <button
+          type="button"
+          onClick={() => onParamChange('category_id', '')}
+          style={chipStyle(!categoryId)}
         >
-          <option value="">All categories</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
+          All
+        </button>
+
+        {/* Category chips */}
+        {categories.map((cat) => {
+          const active = categoryId === String(cat.id)
+          return (
+            <button
+              key={cat.id}
+              type="button"
+              onClick={() => onParamChange('category_id', active ? '' : String(cat.id))}
+              style={chipStyle(active)}
+            >
+              {cat.name}
+            </button>
+          )
+        })}
+
+        {/* Spacer to push sort to right */}
+        <span style={{ flex: 1 }} />
+
+        {/* Sort dropdown */}
+        <select
+          id="job-sort"
+          value={sort}
+          onChange={(e) => onParamChange('sort', e.target.value)}
+          aria-label="Sort jobs"
+          style={{
+            fontFamily: 'var(--heading)',
+            fontWeight: 600,
+            fontSize: '0.75rem',
+            padding: '0.3125rem 0.625rem',
+            borderRadius: 'var(--radius)',
+            border: '2px solid var(--border)',
+            background: 'var(--color-surface)',
+            color: 'var(--color-foreground)',
+            cursor: 'pointer',
+            boxShadow: 'var(--shadow-sm)',
+            outline: 'none',
+          }}
+        >
+          {SORT_OPTIONS.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              Sort: {opt.label}
             </option>
           ))}
-        </SelectField>
+        </select>
+      </div>
 
-        <TextField
-          id="job-country"
-          label="Country"
-          value={draft.country}
-          onChange={(event) => onDraftChange('country', event.target.value)}
-        />
-        <TextField
+      {/* Extra filters: city/country/date — collapsed into a secondary row */}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+          gap: '8px',
+        }}
+      >
+        <input
           id="job-city"
-          label="City"
+          type="text"
+          placeholder="City"
           value={draft.city}
-          onChange={(event) => onDraftChange('city', event.target.value)}
+          onChange={(e) => onDraftChange('city', e.target.value)}
+          className="neo-input"
+          style={{ fontSize: '0.8125rem', padding: '0.375rem 0.625rem' }}
+          aria-label="Filter by city"
         />
-
-        <TextField
+        <input
+          id="job-country"
+          type="text"
+          placeholder="Country"
+          value={draft.country}
+          onChange={(e) => onDraftChange('country', e.target.value)}
+          className="neo-input"
+          style={{ fontSize: '0.8125rem', padding: '0.375rem 0.625rem' }}
+          aria-label="Filter by country"
+        />
+        <input
           id="job-date"
-          label="Schedule date"
           type="date"
           value={scheduleDate}
-          onChange={(event) => onParamChange('schedule_date', event.target.value)}
+          onChange={(e) => onParamChange('schedule_date', e.target.value)}
+          className="neo-input"
+          style={{ fontSize: '0.8125rem', padding: '0.375rem 0.625rem' }}
+          aria-label="Filter by schedule date"
         />
-
-        <SelectField
-          id="job-sort"
-          label="Sort by"
-          value={sort}
-          onChange={(event) => onParamChange('sort', event.target.value)}
-        >
-          {SORT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </SelectField>
       </div>
     </div>
   )
