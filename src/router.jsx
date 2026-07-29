@@ -65,7 +65,11 @@ export const router = createBrowserRouter([
               // A cleaner's home is the job feed (browse/search/filter).
               { index: true, element: <JobsPage /> },
               { path: 'saved-jobs', element: <SavedJobsPage /> },
-              { path: 'profile', element: <OwnProfilePage /> },
+              { path: 'profile', element: <OwnProfilePage view="profile" /> },
+              { path: 'profile/edit', element: <OwnProfilePage view="edit" /> },
+              // Mirrors the public detail routes so cleaners keep their sidebar.
+              { path: 'jobs/:id', element: <JobDetailPage /> },
+              { path: 'employers/:id', element: <ProfileViewPage role="employer" /> },
             ],
           },
         ],
@@ -78,9 +82,13 @@ export const router = createBrowserRouter([
             element: <EmployerLayout />,
             children: [
               { index: true, element: <PlaceholderPage title="Employer dashboard" /> },
-              { path: 'profile', element: <OwnProfilePage /> },
+              { path: 'profile', element: <OwnProfilePage view="profile" /> },
+              { path: 'profile/edit', element: <OwnProfilePage view="edit" /> },
               { path: 'jobs', element: <MyJobsPage /> },
               { path: 'jobs/new', element: <JobCreatePage /> },
+              // Mirrors the public detail routes so employers keep their sidebar.
+              { path: 'jobs/:id', element: <JobDetailPage /> },
+              { path: 'cleaners/:id', element: <ProfileViewPage role="cleaner" /> },
             ],
           },
         ],
