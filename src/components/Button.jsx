@@ -1,12 +1,118 @@
+/**
+ * Button — neo-brutalist button system.
+ * Variants: primary (green + hard shadow), secondary (yellow), ghost (outlined),
+ * icon (no border/background, for chromeless icon-only actions), danger (red).
+ */
+
+const BASE =
+  'inline-flex items-center justify-center gap-1.5 font-semibold transition-all duration-100 disabled:cursor-not-allowed disabled:opacity-55 select-none'
+
 const VARIANTS = {
-  primary: 'bg-primary text-white hover:bg-primary-hover',
-  ghost: 'text-primary hover:bg-primary/10',
+  primary: {
+    style: {
+      background: 'var(--color-primary)',
+      color: '#ffffff',
+      border: '2px solid var(--border)',
+      borderRadius: 'var(--radius)',
+      boxShadow: 'var(--shadow-btn)',
+      fontFamily: 'var(--heading)',
+      fontSize: '14px',
+      fontWeight: 700,
+      padding: '8px 18px',
+      cursor: 'pointer',
+    },
+    hover: {
+      boxShadow: '1px 1px 0 #1a1a1a',
+      transform: 'translate(2px, 2px)',
+    },
+  },
+  secondary: {
+    style: {
+      background: 'var(--color-highlight)',
+      color: 'var(--color-primary)',
+      border: '2px solid var(--border)',
+      borderRadius: 'var(--radius)',
+      boxShadow: 'var(--shadow-btn)',
+      fontFamily: 'var(--heading)',
+      fontSize: '14px',
+      fontWeight: 700,
+      padding: '8px 18px',
+      cursor: 'pointer',
+    },
+    hover: {
+      boxShadow: '1px 1px 0 #1a1a1a',
+      transform: 'translate(2px, 2px)',
+    },
+  },
+  ghost: {
+    style: {
+      background: 'transparent',
+      color: 'var(--color-primary)',
+      border: '2px solid var(--color-primary)',
+      borderRadius: 'var(--radius)',
+      boxShadow: 'none',
+      fontFamily: 'var(--heading)',
+      fontSize: '14px',
+      fontWeight: 600,
+      padding: '7px 16px',
+      cursor: 'pointer',
+    },
+    hover: {
+      background: 'var(--color-primary-hover)',
+      color: '#ffffff',
+    },
+  },
+  icon: {
+    style: {
+      background: 'transparent',
+      color: 'var(--color-primary)',
+      border: 'none',
+      borderRadius: 'var(--radius)',
+      boxShadow: 'none',
+      padding: '4px',
+      cursor: 'pointer',
+    },
+    hover: {
+      background: 'var(--color-highlight-soft)',
+    },
+  },
+  danger: {
+    style: {
+      background: 'var(--color-danger)',
+      color: '#ffffff',
+      border: '2px solid var(--border)',
+      borderRadius: 'var(--radius)',
+      boxShadow: 'var(--shadow-btn)',
+      fontFamily: 'var(--heading)',
+      fontSize: '14px',
+      fontWeight: 700,
+      padding: '8px 18px',
+      cursor: 'pointer',
+    },
+    hover: {
+      boxShadow: '1px 1px 0 #1a1a1a',
+      transform: 'translate(2px, 2px)',
+    },
+  },
 }
 
-export default function Button({ variant = 'primary', className = '', ...props }) {
+export default function Button({ variant = 'primary', className = '', style: extStyle = {}, ...props }) {
+  const v = VARIANTS[variant] ?? VARIANTS.primary
+
   return (
     <button
-      className={`inline-flex items-center justify-center rounded-md px-4 py-2 font-medium transition disabled:cursor-not-allowed disabled:opacity-60 ${VARIANTS[variant]} ${className}`}
+      className={`${BASE} ${className}`}
+      style={{ ...v.style, ...extStyle }}
+      onMouseEnter={(e) => {
+        if (!props.disabled) {
+          Object.assign(e.currentTarget.style, v.hover)
+        }
+      }}
+      onMouseLeave={(e) => {
+        if (!props.disabled) {
+          Object.assign(e.currentTarget.style, v.style, extStyle)
+        }
+      }}
       {...props}
     />
   )

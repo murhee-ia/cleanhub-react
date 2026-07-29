@@ -7,7 +7,16 @@ const SelectField = forwardRef(function SelectField(
   return (
     <div className="flex flex-col gap-1.5">
       {label && (
-        <label htmlFor={id} className="text-sm font-medium text-foreground">
+        <label
+          htmlFor={id}
+          style={{
+            fontFamily: 'var(--heading)',
+            fontSize: '13px',
+            fontWeight: 600,
+            color: 'var(--color-foreground)',
+            letterSpacing: '0.01em',
+          }}
+        >
           {label}
         </label>
       )}
@@ -15,13 +24,17 @@ const SelectField = forwardRef(function SelectField(
         id={id}
         ref={ref}
         aria-invalid={error ? true : undefined}
-        className={`rounded-md border bg-surface px-3 py-2 text-foreground outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 ${className}`}
-        style={{ borderColor: error ? 'var(--color-danger)' : 'var(--border)' }}
+        className={`neo-input ${className}`}
+        style={{ cursor: 'pointer' }}
         {...props}
       >
         {children}
       </select>
-      {error && <p className="text-sm text-danger">{error}</p>}
+      {error && (
+        <p style={{ fontSize: '13px', color: 'var(--color-danger)', fontWeight: 500 }}>
+          {error}
+        </p>
+      )}
     </div>
   )
 })
