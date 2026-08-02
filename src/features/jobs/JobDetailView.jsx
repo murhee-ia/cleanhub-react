@@ -2,6 +2,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import {
   MapPin,
   Calendar,
+  CalendarClock,
+  Users,
   FileText,
   CheckSquare,
   Star,
@@ -73,6 +75,11 @@ export default function JobDetailView({ job }) {
         </h1>
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px', fontSize: '14px', color: 'var(--color-muted)' }}>
           <JobStatusBadge status={job.status} />
+          {job.category?.name && (
+            <span style={{ fontFamily: 'var(--heading)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--color-muted)' }}>
+              {job.category.name}
+            </span>
+          )}
           {location && (
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <MapPin style={{ width: '14px', height: '14px' }} /> {location}
@@ -81,6 +88,16 @@ export default function JobDetailView({ job }) {
           {scheduleDate && (
             <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               <Calendar style={{ width: '14px', height: '14px' }} /> {scheduleDate}{timeRange ? ` · ${timeRange}` : ''}
+            </span>
+          )}
+          {job.cleaners_needed != null && (
+            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <Users style={{ width: '14px', height: '14px' }} /> {job.cleaners_needed} {job.cleaners_needed === 1 ? 'cleaner' : 'cleaners'} needed
+            </span>
+          )}
+          {job.application_deadline && (
+            <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <CalendarClock style={{ width: '14px', height: '14px' }} /> Apply by {formatDate(job.application_deadline)}
             </span>
           )}
         </div>
