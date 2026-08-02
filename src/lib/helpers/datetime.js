@@ -9,3 +9,10 @@ export function formatDate(iso) {
     day: 'numeric',
   })
 }
+
+// Same display, but for a full ISO timestamp (an API `created_at`) rather than
+// a date-only string.
+export function formatTimestampDate(iso) {
+  if (!iso) return null
+  return formatDate(iso.slice(0, 10))
+}
