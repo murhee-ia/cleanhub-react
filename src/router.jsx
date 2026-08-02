@@ -33,6 +33,19 @@ export const router = createBrowserRouter([
       { path: '/jobs/:id', element: <JobDetailPage /> },
       { path: '/not-allowed', element: <NotAllowedPage /> },
 
+      // Any authenticated user can view another user's profile. Cleaner and
+      // employer also get sidebar-preserving copies nested below; this is the
+      // fallback for moderators and admins (and for a viewer linking
+      // to their own role's profile type, e.g. an employer viewing another
+      // employer) — see lib/helpers/paths.js for the role-aware picker.
+      {
+        element: <ProtectedRoute />,
+        children: [
+          { path: '/cleaners/:id', element: <ProfileViewPage role="cleaner" /> },
+          { path: '/employers/:id', element: <ProfileViewPage role="employer" /> },
+        ],
+      },
+
       // Auth (centered card frame)
       {
         element: <AuthLayout />,

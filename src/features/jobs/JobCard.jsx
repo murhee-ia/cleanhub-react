@@ -98,7 +98,9 @@ export default function JobCard({ job, showEmployer = true, notice }) {
               {job.category.name}
             </span>
           )}
-          <SaveJobButton job={job} className="-mr-1 shrink-0" />
+          {(job.status === 'open' || job.is_saved) && (
+            <SaveJobButton job={job} className="-mr-1 shrink-0" />
+          )}
         </div>
       </div>
 
