@@ -1,15 +1,18 @@
 import api from './client'
 
+// Ids reach these keys both as route params (strings) and as payload fields
+// (numbers), so they're normalised — otherwise `detail(1)` and `detail('1')`
+// would be two separate cache entries and invalidation would miss one.
 export const jobKeys = {
   all: ['jobs'],
   lists: () => [...jobKeys.all, 'list'],
   list: (filters) => [...jobKeys.lists(), filters],
   mine: () => [...jobKeys.all, 'mine'],
   mineList: (filters) => [...jobKeys.mine(), filters],
-  employer: (employerId) => [...jobKeys.all, 'employer', employerId],
+  employer: (employerId) => [...jobKeys.all, 'employer', String(employerId)],
   employerList: (employerId, filters) => [...jobKeys.employer(employerId), filters],
   details: () => [...jobKeys.all, 'detail'],
-  detail: (id) => [...jobKeys.details(), id],
+  detail: (id) => [...jobKeys.details(), String(id)],
 }
 
 // Public browse — published + open posts. Returns the paginated envelope
