@@ -25,15 +25,16 @@ function initialsOf(name) {
     .toUpperCase()
 }
 
-export function Avatar({ src, name }) {
+export function Avatar({ src, name, size = 88 }) {
+  const box = { width: `${size}px`, height: `${size}px`, flexShrink: 0 }
+
   if (src) {
     return (
       <img
         src={src}
         alt={name}
         style={{
-          width: '88px',
-          height: '88px',
+          ...box,
           borderRadius: 'var(--radius)',
           objectFit: 'cover',
           border: '2px solid var(--border)',
@@ -45,8 +46,7 @@ export function Avatar({ src, name }) {
   return (
     <div
       style={{
-        width: '88px',
-        height: '88px',
+        ...box,
         borderRadius: 'var(--radius)',
         background: 'var(--color-highlight-muted)',
         border: '2px solid var(--border)',
@@ -56,7 +56,7 @@ export function Avatar({ src, name }) {
         justifyContent: 'center',
         fontFamily: 'var(--heading)',
         fontWeight: 700,
-        fontSize: '26px',
+        fontSize: `${Math.round(size * 0.3)}px`,
         color: 'var(--color-primary)',
       }}
       aria-hidden="true"
