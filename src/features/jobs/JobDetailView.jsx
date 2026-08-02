@@ -51,9 +51,9 @@ export default function JobDetailView({ job }) {
   const { user, isAuthenticated } = useAuth()
   const navigate = useNavigate()
 
-  const location    = [job.address, job.city, job.country].filter(Boolean).join(', ')
+  const location = [job.address, job.city, job.country].filter(Boolean).join(', ')
   const scheduleDate = formatDate(job.schedule_date)
-  const timeRange   = job.start_time && job.end_time ? `${job.start_time}–${job.end_time}` : null
+  const timeRange = job.start_time && job.end_time ? `${job.start_time}–${job.end_time}` : null
 
   function goToLogin() {
     navigate('/login', { state: { from: { pathname: `/jobs/${job.id}` } } })
@@ -148,7 +148,6 @@ export default function JobDetailView({ job }) {
                 <div style={{ background: 'var(--color-highlight)', border: '2px solid var(--border)', borderRadius: 'var(--radius)', padding: '16px', textAlign: 'center' }}>
                   <p style={{ fontFamily: 'var(--heading)', fontWeight: 700, fontSize: '24px', color: 'var(--color-foreground)', margin: 0, lineHeight: 1 }}>
                     {job.pay_currency} {Number(job.pay_amount).toLocaleString()}
-                    {job.pay_rate && <span style={{ fontWeight: 600, fontSize: '13px' }}> / {job.pay_rate}</span>}
                   </p>
                   <p style={{ fontFamily: 'var(--heading)', fontWeight: 600, fontSize: '9px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-muted)', margin: '6px 0 0' }}>
                     Rate offered

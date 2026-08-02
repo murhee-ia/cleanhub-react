@@ -198,11 +198,6 @@ export default function JobCard({ job, showEmployer = true, notice }) {
             }}
           >
             {job.pay_currency} {Number(job.pay_amount).toLocaleString()}
-            {job.pay_rate && (
-              <span style={{ fontWeight: 500, fontSize: '0.75rem', color: 'var(--color-muted)' }}>
-                {' '}/ {job.pay_rate}
-              </span>
-            )}
           </span>
         ) : (
           <span />
