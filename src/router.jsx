@@ -33,15 +33,6 @@ export const router = createBrowserRouter([
       { path: '/jobs/:id', element: <JobDetailPage /> },
       { path: '/not-allowed', element: <NotAllowedPage /> },
 
-      // Any authenticated user can view another user's profile.
-      {
-        element: <ProtectedRoute />,
-        children: [
-          { path: '/cleaners/:id', element: <ProfileViewPage role="cleaner" /> },
-          { path: '/employers/:id', element: <ProfileViewPage role="employer" /> },
-        ],
-      },
-
       // Auth (centered card frame)
       {
         element: <AuthLayout />,
