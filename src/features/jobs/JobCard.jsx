@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Calendar, TriangleAlert } from 'lucide-react'
+import { MapPin, Calendar, TriangleAlert, Users } from 'lucide-react'
 import PaperCard from '../../components/PaperCard'
 import RatingSummary from '../../components/RatingSummary'
 import { useAuth } from '../../hooks/useAuth'
@@ -7,6 +7,7 @@ import { formatDate } from '../../lib/helpers/datetime'
 import { jobDetailPath } from '../../lib/helpers/paths'
 import JobStatusBadge from './JobStatusBadge'
 import SaveJobButton from './SaveJobButton'
+import ApplicationStatusBadge from '../applications/ApplicationStatusBadge'
 
 /* Small employer/company initials avatar */
 function EmployerAvatar({ name = '' }) {
@@ -47,10 +48,13 @@ function EmployerAvatar({ name = '' }) {
   )
 }
 
-export default function JobCard({ job, showEmployer = true, notice }) {
+export default function JobCard({ job, showEmployer = true, notice, footer }) {
   const { user } = useAuth()
   const location = [job.city, job.country].filter(Boolean).join(', ')
   const detailPath = jobDetailPath(job.id, user?.role)
+  // Only the owning employer receives applications_count, so its presence is
+  // what marks this card as one of the viewer's own posts.
+  const applicantCount = job.applications_count
 
   return (
     <PaperCard className="p-5 flex flex-col gap-3">
@@ -82,6 +86,9 @@ export default function JobCard({ job, showEmployer = true, notice }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
           <JobStatusBadge status={job.status} />
+          {job.has_applied && (
+            <ApplicationStatusBadge status={job.application_status} />
+          )}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           {job.category?.name && (
@@ -236,6 +243,20 @@ export default function JobCard({ job, showEmployer = true, notice }) {
           View job →
         </Link>
       </div>
+
+      {applicantCount != null && (
+        <Link
+          to={`/employer/jobs/${job.id}/applicants`}
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+        >
+          <Users className="size-4 shrink-0" aria-hidden="true" />
+          {applicantCount} {applicantCount === 1 ? 'applicant' : 'applicants'} →
+        </Link>
+      )}
+
+      {footer && (
+        <div style={{ borderTop: '1.5px dashed rgba(0,0,0,0.10)', paddingTop: '12px' }}>{footer}</div>
+      )}
     </PaperCard>
   )
 }

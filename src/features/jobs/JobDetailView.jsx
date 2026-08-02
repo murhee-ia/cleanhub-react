@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   MapPin,
@@ -15,8 +16,10 @@ import RatingSummary from '../../components/RatingSummary'
 import { useAuth } from '../../hooks/useAuth'
 import { formatDate } from '../../lib/helpers/datetime'
 import { employerProfilePath } from '../../lib/helpers/paths'
+import { ROLES } from '../../lib/helpers/roles'
 import JobStatusBadge from './JobStatusBadge'
 import SaveJobButton from './SaveJobButton'
+import ApplyModal from '../applications/ApplyModal'
 
 function SectionHeader({ icon: Icon, title }) {
   return (
@@ -52,6 +55,11 @@ function BulletList({ text }) {
 export default function JobDetailView({ job }) {
   const { user, isAuthenticated } = useAuth()
   const navigate = useNavigate()
+  const [applyOpen, setApplyOpen] = useState(false)
+
+  // Applying is cleaner-only. Employers (including on their own post) and
+  // moderators/admins get no Apply button — the backend policy is the real gate.
+  const isCleaner = isAuthenticated && user?.role === ROLES.CLEANER
 
   const location = [job.address, job.city, job.country].filter(Boolean).join(', ')
   const scheduleDate = formatDate(job.schedule_date)
@@ -189,13 +197,27 @@ export default function JobDetailView({ job }) {
 
               {/* CTA Buttons */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {job.status === 'open' && (
-                  isAuthenticated ? (
-                    <Button type="button" disabled title="Applying opens soon" style={{ width: '100%', padding: '12px' }}>
-                      Apply to this job
+                {job.status === 'open' && !isAuthenticated && (
+                  <Button type="button" onClick={goToLogin} style={{ width: '100%', padding: '12px' }}>
+                    Apply to this job
+                  </Button>
+                )}
+                {job.status === 'open' && isCleaner && (
+                  job.has_applied ? (
+                    <Button
+                      type="button"
+                      disabled
+                      className="capitalize"
+                      style={{ width: '100%', padding: '12px' }}
+                    >
+                      Applied · {job.application_status}
                     </Button>
                   ) : (
-                    <Button type="button" onClick={goToLogin} style={{ width: '100%', padding: '12px' }}>
+                    <Button
+                      type="button"
+                      onClick={() => setApplyOpen(true)}
+                      style={{ width: '100%', padding: '12px' }}
+                    >
                       Apply to this job
                     </Button>
                   )
@@ -208,6 +230,10 @@ export default function JobDetailView({ job }) {
           </div>
         </aside>
       </div>
+
+      {isCleaner && (
+        <ApplyModal job={job} open={applyOpen} onClose={() => setApplyOpen(false)} />
+      )}
     </div>
   )
 }

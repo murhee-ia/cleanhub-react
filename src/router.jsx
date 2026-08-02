@@ -16,6 +16,7 @@ import ProfileViewPage from './pages/ProfileViewPage'
 import OwnProfilePage from './pages/OwnProfilePage'
 import MyJobsPage from './pages/MyJobsPage'
 import SavedJobsPage from './pages/SavedJobsPage'
+import MyApplicationsPage from './pages/MyApplicationsPage'
 import JobCreatePage from './pages/JobCreatePage'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
@@ -69,6 +70,7 @@ export const router = createBrowserRouter([
               // A cleaner's home is the job feed (browse/search/filter).
               { index: true, element: <JobsPage /> },
               { path: 'saved-jobs', element: <SavedJobsPage /> },
+              { path: 'applications', element: <MyApplicationsPage /> },
               { path: 'profile', element: <OwnProfilePage view="profile" /> },
               { path: 'profile/edit', element: <OwnProfilePage view="edit" /> },
               // Mirrors the public detail routes so cleaners keep their sidebar.

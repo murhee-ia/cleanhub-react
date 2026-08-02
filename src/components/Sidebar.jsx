@@ -12,6 +12,7 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import {
   Home,
   Bookmark,
+  ClipboardList,
   Briefcase,
   User,
   UserPen,
@@ -25,6 +26,7 @@ import { useAuth } from '../hooks/useAuth'
 const CLEANER_MAIN = [
   { to: '/cleaner', label: 'Home Feed', icon: Home, end: true },
   { to: '/cleaner/saved-jobs', label: 'Saved Jobs', icon: Bookmark, end: false },
+  { to: '/cleaner/applications', label: 'My Applications', icon: ClipboardList, end: false },
 ]
 const CLEANER_ACCOUNT = [
   { to: '/cleaner/profile', label: 'My Profile', icon: User, end: true },
