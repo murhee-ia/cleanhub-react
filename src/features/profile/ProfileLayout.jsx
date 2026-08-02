@@ -1,7 +1,19 @@
-import PaperCard from '../../components/PaperCard'
-import WashiTape from '../../components/WashiTape'
-
 // Small presentational atoms shared by the cleaner and employer profile views.
+
+/* Inner bordered box used for each right-column section on a profile page */
+export function BoxCard({ icon: Icon, title, children }) {
+  return (
+    <div style={{ background: 'var(--color-surface)', border: '2px solid var(--border)', borderRadius: 'var(--radius)', padding: '20px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', borderBottom: '1.5px solid rgba(0,0,0,0.1)', paddingBottom: '10px' }}>
+        <Icon style={{ width: '16px', height: '16px', color: 'var(--color-foreground)' }} />
+        <h2 style={{ fontFamily: 'var(--heading)', fontWeight: 700, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-foreground)', margin: 0 }}>
+          {title}
+        </h2>
+      </div>
+      {children}
+    </div>
+  )
+}
 
 function initialsOf(name) {
   return (name || '?')
@@ -15,11 +27,38 @@ function initialsOf(name) {
 
 export function Avatar({ src, name }) {
   if (src) {
-    return <img src={src} alt={name} className="size-24 rounded-full object-cover" />
+    return (
+      <img
+        src={src}
+        alt={name}
+        style={{
+          width: '88px',
+          height: '88px',
+          borderRadius: 'var(--radius)',
+          objectFit: 'cover',
+          border: '2px solid var(--border)',
+          boxShadow: 'var(--shadow-sm)',
+        }}
+      />
+    )
   }
   return (
     <div
-      className="flex size-24 items-center justify-center rounded-full bg-primary-subtle text-2xl font-medium text-white"
+      style={{
+        width: '88px',
+        height: '88px',
+        borderRadius: 'var(--radius)',
+        background: 'var(--color-highlight-muted)',
+        border: '2px solid var(--border)',
+        boxShadow: 'var(--shadow-sm)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'var(--heading)',
+        fontWeight: 700,
+        fontSize: '26px',
+        color: 'var(--color-primary)',
+      }}
       aria-hidden="true"
     >
       {initialsOf(name)}
@@ -29,17 +68,65 @@ export function Avatar({ src, name }) {
 
 export function Stat({ label, value }) {
   return (
-    <div className="flex flex-col">
-      <span className="font-serif text-2xl text-foreground">{value}</span>
-      <span className="text-sm text-muted">{label}</span>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2px',
+        background: 'var(--color-highlight)',
+        border: '2px solid var(--border)',
+        borderRadius: 'var(--radius)',
+        boxShadow: 'var(--shadow-sm)',
+        padding: '10px 16px',
+        textAlign: 'center',
+        minWidth: '80px',
+      }}
+    >
+      <span
+        style={{
+          fontFamily: 'var(--heading)',
+          fontWeight: 700,
+          fontSize: '26px',
+          color: 'var(--color-foreground)',
+          lineHeight: 1,
+        }}
+      >
+        {value}
+      </span>
+      <span
+        style={{
+          fontFamily: 'var(--heading)',
+          fontWeight: 500,
+          fontSize: '11px',
+          color: 'var(--color-muted)',
+          textTransform: 'uppercase',
+          letterSpacing: '0.08em',
+        }}
+      >
+        {label}
+      </span>
     </div>
   )
 }
 
 export function Section({ title, children }) {
   return (
-    <section className="flex flex-col gap-2">
-      <h2 className="m-0 font-serif text-lg text-foreground">{title}</h2>
+    <section style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      <h2
+        style={{
+          fontFamily: 'var(--heading)',
+          fontWeight: 700,
+          fontSize: '14px',
+          color: 'var(--color-foreground)',
+          textTransform: 'uppercase',
+          letterSpacing: '0.10em',
+          margin: 0,
+          paddingBottom: '8px',
+          borderBottom: '2px solid var(--border)',
+        }}
+      >
+        {title}
+      </h2>
       {children}
     </section>
   )
@@ -48,43 +135,33 @@ export function Section({ title, children }) {
 // Renders snake_case string values (categories/languages) as readable chips.
 export function TagList({ items = [], emptyLabel = '—' }) {
   if (!items.length) {
-    return <p className="text-sm text-muted">{emptyLabel}</p>
+    return (
+      <p style={{ fontSize: '13px', color: 'var(--color-muted)', margin: 0 }}>
+        {emptyLabel}
+      </p>
+    )
   }
   return (
-    <ul className="flex flex-wrap gap-2">
+    <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', listStyle: 'none', margin: 0, padding: 0 }}>
       {items.map((item) => (
         <li
           key={item}
-          className="rounded-full bg-highlight-muted px-3 py-1 text-sm capitalize text-foreground"
+          style={{
+            background: 'var(--color-highlight-muted)',
+            border: '2px solid var(--border)',
+            borderRadius: 'var(--radius)',
+            boxShadow: 'var(--shadow-sm)',
+            padding: '4px 12px',
+            fontFamily: 'var(--heading)',
+            fontWeight: 600,
+            fontSize: '12px',
+            textTransform: 'capitalize',
+            color: 'var(--color-foreground)',
+          }}
         >
           {item.replace(/_/g, ' ')}
         </li>
       ))}
     </ul>
-  )
-}
-
-// Two-column profile frame: an identity/stats sidebar beside a content column
-// on wide screens, collapsing to a single stacked column on mobile so the card
-// fills desktop width instead of floating with large empty gutters.
-export function ProfileShell({ header, stats, children }) {
-  return (
-    <PaperCard className="relative mx-auto w-full max-w-6xl p-6 sm:p-8">
-      <WashiTape className="absolute -top-3 left-10" rotation={-4} />
-      <div className="grid gap-8 lg:grid-cols-[18rem_1fr] lg:gap-12">
-        <aside
-          className="flex flex-col gap-6 lg:border-r lg:pr-10"
-          style={{ borderColor: 'var(--border)' }}
-        >
-          {header}
-          {stats && (
-            <div className="flex gap-10 border-t pt-6" style={{ borderColor: 'var(--border)' }}>
-              {stats}
-            </div>
-          )}
-        </aside>
-        <div className="flex flex-col gap-6">{children}</div>
-      </div>
-    </PaperCard>
   )
 }

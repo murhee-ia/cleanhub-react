@@ -10,7 +10,7 @@ export default function JobCreatePage() {
     mutationFn: createJob,
     onSuccess: (created) => {
       queryClient.invalidateQueries({ queryKey: jobKeys.mine() })
-      navigate(`/jobs/${created.id}`)
+      navigate(`/employer/jobs/${created.id}`)
     },
   })
 

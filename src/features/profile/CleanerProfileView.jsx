@@ -1,48 +1,108 @@
-import { MapPin } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { MapPin, Globe, Tag, FileText, CheckCircle } from 'lucide-react'
+import PaperCard from '../../components/PaperCard'
 import RatingSummary from '../../components/RatingSummary'
 import DocumentList from './DocumentList'
-import { Avatar, Stat, Section, TagList, ProfileShell } from './ProfileLayout'
+import { Avatar, Stat, TagList, BoxCard } from './ProfileLayout'
 
-export default function CleanerProfileView({ profile }) {
+export default function CleanerProfileView({ profile, isOwnProfile = false }) {
   const location = [profile.city, profile.country].filter(Boolean).join(', ')
 
-  const header = (
-    <div className="flex flex-col gap-3">
-      <Avatar src={profile.photo_url} name={profile.full_name} />
-      <div className="flex flex-col gap-1">
-        <h1 className="m-0 font-serif text-2xl text-foreground">{profile.full_name}</h1>
-        {location && (
-          <p className="flex items-center gap-1.5 text-sm text-muted">
-            <MapPin className="size-4" aria-hidden="true" />
-            {location}
-          </p>
-        )}
-        <RatingSummary average={profile.rating_average} count={profile.rating_count} />
-      </div>
-    </div>
-  )
-
-  const stats = <Stat label="Completed jobs" value={profile.completed_jobs_count ?? 0} />
-
   return (
-    <ProfileShell header={header} stats={stats}>
-      {profile.bio && (
-        <Section title="About">
-          <p className="whitespace-pre-line text-foreground">{profile.bio}</p>
-        </Section>
-      )}
-      <Section title="Cleaning categories">
-        <TagList
-          items={(profile.cleaning_categories ?? []).map((category) => category.name)}
-          emptyLabel="No categories listed"
-        />
-      </Section>
-      <Section title="Languages">
-        <TagList items={profile.languages} emptyLabel="No languages listed" />
-      </Section>
-      <Section title="Documents">
-        <DocumentList documents={profile.documents} />
-      </Section>
-    </ProfileShell>
+    <PaperCard className="relative w-full p-6 sm:p-10">
+      <div className="grid gap-8 lg:grid-cols-[17rem_1fr]">
+          
+          {/* ── Left Column: Identity & Stats ── */}
+          <aside style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '24px', background: 'var(--color-surface)', border: '2px solid var(--border)', borderRadius: 'var(--radius)' }}>
+              <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '8px' }}>
+                <Avatar src={profile.photo_url} name={profile.full_name} />
+              </div>
+              
+              <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <h1 style={{ fontFamily: 'var(--heading)', fontWeight: 700, fontSize: '20px', color: 'var(--color-foreground)', margin: 0, lineHeight: 1.2 }}>
+                  {profile.full_name}
+                </h1>
+                <p style={{ fontSize: '12px', color: 'var(--color-muted)', margin: 0 }}>
+                  Cleaner
+                </p>
+                {location && (
+                  <p style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '12px', color: 'var(--color-muted)', margin: 0 }}>
+                    <MapPin style={{ width: '12px', height: '12px' }} /> {location}
+                  </p>
+                )}
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '4px' }}>
+                  <RatingSummary average={profile.rating_average} count={profile.rating_count} />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '8px', paddingTop: '16px', borderTop: '1.5px solid rgba(0,0,0,0.1)' }}>
+                <Stat label="Jobs Done" value={profile.completed_jobs_count ?? 0} />
+                <Stat label="Rating" value={profile.rating_average > 0 ? Number(profile.rating_average).toFixed(1) : '-'} />
+              </div>
+
+              {isOwnProfile && (
+                <div style={{ marginTop: '4px' }}>
+                  <Link
+                    to="/cleaner/profile/edit"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      fontFamily: 'var(--heading)',
+                      fontWeight: 700,
+                      fontSize: '13px',
+                      color: 'var(--color-foreground)',
+                      textDecoration: 'none',
+                      background: 'var(--color-highlight)',
+                      border: '2px solid var(--border)',
+                      borderRadius: 'var(--radius)',
+                      boxShadow: 'var(--shadow-btn-sm)',
+                      padding: '10px 16px',
+                      transition: 'box-shadow 0.1s, transform 0.1s',
+                      width: '100%',
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '1px 1px 0 #1a1a1a'; e.currentTarget.style.transform = 'translate(1px,1px)' }}
+                    onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'var(--shadow-btn-sm)'; e.currentTarget.style.transform = 'none' }}
+                  >
+                    ✏ Edit profile
+                  </Link>
+                </div>
+              )}
+            </div>
+          </aside>
+
+          {/* ── Right Column: Details ── */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            
+            {profile.bio && (
+              <BoxCard icon={CheckCircle} title="About">
+                <p style={{ whiteSpace: 'pre-line', color: 'var(--color-foreground)', fontSize: '15px', lineHeight: 1.6, margin: 0 }}>
+                  {profile.bio}
+                </p>
+              </BoxCard>
+            )}
+
+            <div style={{ display: 'grid', gap: '20px', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
+              <BoxCard icon={Tag} title="Cleaning Categories">
+                <TagList
+                  items={(profile.cleaning_categories ?? []).map((cat) => cat.name)}
+                  emptyLabel="No categories listed"
+                />
+              </BoxCard>
+              
+              <BoxCard icon={Globe} title="Languages">
+                <TagList items={profile.languages} emptyLabel="No languages listed" />
+              </BoxCard>
+            </div>
+
+            <BoxCard icon={FileText} title="Documents & Certifications">
+              <DocumentList documents={profile.documents} />
+            </BoxCard>
+
+          </div>
+        </div>
+      </PaperCard>
   )
 }

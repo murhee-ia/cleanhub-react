@@ -1,9 +1,11 @@
-// Paper-feel container: light grain (.paper) + hairline border on a surface.
-export default function PaperCard({ className = '', children, ...props }) {
+/**
+ * PaperCard — neo-brutalist white card with hard offset shadow + thick border.
+ * Use `flat` prop to suppress the hover-lift animation (for forms / static panels).
+ */
+export default function PaperCard({ className = '', flat = false, children, ...props }) {
   return (
     <div
-      className={`paper rounded-lg border shadow-sm ${className}`}
-      style={{ borderColor: 'var(--border)' }}
+      className={`${flat ? 'paper-flat' : 'paper'} ${className}`}
       {...props}
     >
       {children}

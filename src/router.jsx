@@ -15,6 +15,7 @@ import NotAllowedPage from './pages/NotAllowedPage'
 import ProfileViewPage from './pages/ProfileViewPage'
 import OwnProfilePage from './pages/OwnProfilePage'
 import MyJobsPage from './pages/MyJobsPage'
+import SavedJobsPage from './pages/SavedJobsPage'
 import JobCreatePage from './pages/JobCreatePage'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
@@ -32,7 +33,11 @@ export const router = createBrowserRouter([
       { path: '/jobs/:id', element: <JobDetailPage /> },
       { path: '/not-allowed', element: <NotAllowedPage /> },
 
-      // Any authenticated user can view another user's profile.
+      // Any authenticated user can view another user's profile. Cleaner and
+      // employer also get sidebar-preserving copies nested below; this is the
+      // fallback for moderators and admins (and for a viewer linking
+      // to their own role's profile type, e.g. an employer viewing another
+      // employer) — see lib/helpers/paths.js for the role-aware picker.
       {
         element: <ProtectedRoute />,
         children: [
@@ -63,7 +68,12 @@ export const router = createBrowserRouter([
             children: [
               // A cleaner's home is the job feed (browse/search/filter).
               { index: true, element: <JobsPage /> },
-              { path: 'profile', element: <OwnProfilePage /> },
+              { path: 'saved-jobs', element: <SavedJobsPage /> },
+              { path: 'profile', element: <OwnProfilePage view="profile" /> },
+              { path: 'profile/edit', element: <OwnProfilePage view="edit" /> },
+              // Mirrors the public detail routes so cleaners keep their sidebar.
+              { path: 'jobs/:id', element: <JobDetailPage /> },
+              { path: 'employers/:id', element: <ProfileViewPage role="employer" /> },
             ],
           },
         ],
@@ -76,9 +86,13 @@ export const router = createBrowserRouter([
             element: <EmployerLayout />,
             children: [
               { index: true, element: <PlaceholderPage title="Employer dashboard" /> },
-              { path: 'profile', element: <OwnProfilePage /> },
+              { path: 'profile', element: <OwnProfilePage view="profile" /> },
+              { path: 'profile/edit', element: <OwnProfilePage view="edit" /> },
               { path: 'jobs', element: <MyJobsPage /> },
               { path: 'jobs/new', element: <JobCreatePage /> },
+              // Mirrors the public detail routes so employers keep their sidebar.
+              { path: 'jobs/:id', element: <JobDetailPage /> },
+              { path: 'cleaners/:id', element: <ProfileViewPage role="cleaner" /> },
             ],
           },
         ],

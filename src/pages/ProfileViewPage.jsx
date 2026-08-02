@@ -8,17 +8,33 @@ import EmployerProfileView from '../features/profile/EmployerProfileView'
 // /employers/:id. `:id` is the user id. One component keeps the
 // loading/error/not-found scaffolding DRY across both roles.
 const CONFIG = {
-  cleaner: { key: profileKeys.cleaner, fetch: getCleanerProfile, View: CleanerProfileView, noun: 'Cleaner' },
-  employer: { key: profileKeys.employer, fetch: getEmployerProfile, View: EmployerProfileView, noun: 'Employer' },
+  cleaner: {
+    key: profileKeys.cleaner,
+    fetch: getCleanerProfile,
+    View: CleanerProfileView,
+    noun: 'Cleaner',
+    breadcrumb: 'CLEANER · PROFILE',
+  },
+  employer: {
+    key: profileKeys.employer,
+    fetch: getEmployerProfile,
+    View: EmployerProfileView,
+    noun: 'Employer',
+    breadcrumb: 'EMPLOYER · PROFILE',
+  },
 }
 
 function StatusMessage({ children }) {
-  return <main className="mx-auto max-w-3xl p-8 text-center text-muted">{children}</main>
+  return (
+    <div className="page-content">
+      <p style={{ color: 'var(--color-muted)', padding: '40px 0', textAlign: 'center' }}>{children}</p>
+    </div>
+  )
 }
 
 export default function ProfileViewPage({ role }) {
   const { id } = useParams()
-  const { key, fetch, View, noun } = CONFIG[role]
+  const { key, fetch, View, noun, breadcrumb } = CONFIG[role]
   const { data, isPending, isError, error } = useQuery({
     queryKey: key(id),
     queryFn: () => fetch(id),
@@ -36,9 +52,11 @@ export default function ProfileViewPage({ role }) {
       </StatusMessage>
     )
   }
+
   return (
-    <main className="p-4 sm:p-6">
+    <div className="page-content">
+      <p className="page-breadcrumb">{breadcrumb}</p>
       <View profile={data} />
-    </main>
+    </div>
   )
 }
