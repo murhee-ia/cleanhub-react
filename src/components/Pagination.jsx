@@ -30,7 +30,7 @@ export default function Pagination({ currentPage, lastPage, onPageChange }) {
           boxShadow: 'var(--shadow-sm)',
         }}
       >
-        {currentPage} / {lastPage}
+        Page {currentPage} of {lastPage}
       </span>
 
       <Button
