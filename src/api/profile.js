@@ -4,8 +4,8 @@ export const profileKeys = {
   all: ['profile'],
   me: () => [...profileKeys.all, 'me'],
   publics: () => [...profileKeys.all, 'public'],
-  cleaner: (id) => [...profileKeys.publics(), 'cleaner', id],
-  employer: (id) => [...profileKeys.publics(), 'employer', id],
+  cleaner: (id) => [...profileKeys.publics(), 'cleaner', String(id)],
+  employer: (id) => [...profileKeys.publics(), 'employer', String(id)],
 }
 
 export async function getMyProfile() {

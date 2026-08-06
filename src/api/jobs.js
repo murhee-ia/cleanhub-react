@@ -1,15 +1,18 @@
 import api from './client'
 
+// Ids reach these keys both as route params (strings) and as payload fields
+// (numbers), so they're normalised — otherwise `detail(1)` and `detail('1')`
+// would be two separate cache entries and invalidation would miss one.
 export const jobKeys = {
   all: ['jobs'],
   lists: () => [...jobKeys.all, 'list'],
   list: (filters) => [...jobKeys.lists(), filters],
   mine: () => [...jobKeys.all, 'mine'],
   mineList: (filters) => [...jobKeys.mine(), filters],
-  employer: (employerId) => [...jobKeys.all, 'employer', employerId],
+  employer: (employerId) => [...jobKeys.all, 'employer', String(employerId)],
   employerList: (employerId, filters) => [...jobKeys.employer(employerId), filters],
   details: () => [...jobKeys.all, 'detail'],
-  detail: (id) => [...jobKeys.details(), id],
+  detail: (id) => [...jobKeys.details(), String(id)],
 }
 
 // Public browse — published + open posts. Returns the paginated envelope
@@ -42,5 +45,14 @@ export async function getJob(id) {
 // Create a post (employer-only). Pass FormData when sending media.
 export async function createJob(payload) {
   const { data } = await api.post('/cleaning-job-posts', payload)
+  return data
+}
+
+// Advance a published post's status (employer-only). The backend enforces the
+// forward-only flow open → reviewing → closed → completed and rejects anything
+// backward, `removed`, or a still-unpublished draft with a 422. Returns the
+// updated job.
+export async function updateJobStatus(id, status) {
+  const { data } = await api.patch(`/cleaning-job-posts/${id}`, { status })
   return data
 }

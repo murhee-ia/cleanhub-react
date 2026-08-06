@@ -16,6 +16,8 @@ import ProfileViewPage from './pages/ProfileViewPage'
 import OwnProfilePage from './pages/OwnProfilePage'
 import MyJobsPage from './pages/MyJobsPage'
 import SavedJobsPage from './pages/SavedJobsPage'
+import MyApplicationsPage from './pages/MyApplicationsPage'
+import JobApplicantsPage from './pages/JobApplicantsPage'
 import JobCreatePage from './pages/JobCreatePage'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
@@ -69,6 +71,7 @@ export const router = createBrowserRouter([
               // A cleaner's home is the job feed (browse/search/filter).
               { index: true, element: <JobsPage /> },
               { path: 'saved-jobs', element: <SavedJobsPage /> },
+              { path: 'applications', element: <MyApplicationsPage /> },
               { path: 'profile', element: <OwnProfilePage view="profile" /> },
               { path: 'profile/edit', element: <OwnProfilePage view="edit" /> },
               // Mirrors the public detail routes so cleaners keep their sidebar.
@@ -90,6 +93,7 @@ export const router = createBrowserRouter([
               { path: 'profile/edit', element: <OwnProfilePage view="edit" /> },
               { path: 'jobs', element: <MyJobsPage /> },
               { path: 'jobs/new', element: <JobCreatePage /> },
+              { path: 'jobs/:id/applicants', element: <JobApplicantsPage /> },
               // Mirrors the public detail routes so employers keep their sidebar.
               { path: 'jobs/:id', element: <JobDetailPage /> },
               { path: 'cleaners/:id', element: <ProfileViewPage role="cleaner" /> },
