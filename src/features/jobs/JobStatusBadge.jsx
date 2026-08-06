@@ -6,7 +6,7 @@ const STATUS_STYLES = {
   reviewing: { background: 'var(--color-highlight-strong)', color: 'var(--color-foreground)', borderColor: 'var(--color-foreground)', borderWidth: '2px' },
   closed: { background: 'var(--color-foreground)', color: 'var(--color-surface)', borderColor: 'rgba(0,0,0,0.2)', borderWidth: '2px' },
   removed: { background: 'var(--color-danger)', color: 'var(--color-foreground)', borderColor: 'var(--color-foreground)', borderWidth: '2px' },
-  completed: { background: 'var(--color-highlight)', color: 'var(--color-foreground)', borderColor: 'var(--color-foreground)', borderWidth: '2px' },
+  completed: { background: 'var(--color-highlight-soft)', color: 'var(--color-foreground)', borderColor: 'var(--color-foreground)', borderWidth: '2px' },
 }
 
 export default function JobStatusBadge({ status }) {

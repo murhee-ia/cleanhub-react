@@ -236,12 +236,12 @@ code {
     border-radius: var(--radius);
     border: 1.5px solid var(--border);
     font-family: var(--heading);
-    font-size: 0.6875rem;
+    font-size: 0.6870rem;
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    padding: 0.125rem 0.5rem;
-    line-height: 1.6;
+    padding: 0.120rem 0.5rem;
+    line-height: 1.4;
   }
 }
 
@@ -350,7 +350,7 @@ code {
   width: 36px;
   height: 36px;
   border-radius: var(--radius);
-  background: var(--color-highlight);
+  background: var(--color-highlight-strong);
   color: var(--color-primary);
   font-family: var(--heading);
   font-size: 13px;
