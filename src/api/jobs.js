@@ -47,3 +47,12 @@ export async function createJob(payload) {
   const { data } = await api.post('/cleaning-job-posts', payload)
   return data
 }
+
+// Advance a published post's status (employer-only). The backend enforces the
+// forward-only flow open → reviewing → closed → completed and rejects anything
+// backward, `removed`, or a still-unpublished draft with a 422. Returns the
+// updated job.
+export async function updateJobStatus(id, status) {
+  const { data } = await api.patch(`/cleaning-job-posts/${id}`, { status })
+  return data
+}

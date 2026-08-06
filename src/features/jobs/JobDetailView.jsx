@@ -19,6 +19,7 @@ import { employerProfilePath } from '../../lib/helpers/paths'
 import { ROLES } from '../../lib/helpers/roles'
 import JobStatusBadge from './JobStatusBadge'
 import SaveJobButton from './SaveJobButton'
+import JobStatusActions from './JobStatusActions'
 import ApplyModal from '../applications/ApplyModal'
 
 function SectionHeader({ icon: Icon, title }) {
@@ -197,6 +198,9 @@ export default function JobDetailView({ job }) {
 
               {/* CTA Buttons */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {/* Owner-only status controls (renders nothing for anyone else) */}
+                <JobStatusActions job={job} />
+
                 {job.status === 'open' && !isAuthenticated && (
                   <Button type="button" onClick={goToLogin} style={{ width: '100%', padding: '12px' }}>
                     Apply to this job
