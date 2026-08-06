@@ -11,6 +11,9 @@ export function useApplicationDecision(applicationId, jobPostId) {
   function invalidate() {
     queryClient.invalidateQueries({ queryKey: applicationKeys.byJob(jobPostId) })
     queryClient.invalidateQueries({ queryKey: applicationKeys.detail(applicationId) })
+    // Accepting/rejecting changes whether this application belongs on the
+    // cleaner's calendar.
+    queryClient.invalidateQueries({ queryKey: applicationKeys.calendar() })
     queryClient.invalidateQueries({ queryKey: jobKeys.mine() })
     queryClient.invalidateQueries({ queryKey: jobKeys.detail(jobPostId) })
   }
