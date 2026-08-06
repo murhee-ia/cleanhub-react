@@ -10,6 +10,7 @@ export const applicationKeys = {
   byJobList: (jobId, filters) => [...applicationKeys.byJob(jobId), filters],
   details: () => [...applicationKeys.all, 'detail'],
   detail: (id) => [...applicationKeys.details(), String(id)],
+  calendar: () => [...applicationKeys.all, 'calendar'],
 }
 
 // Cleaner's own applications (newest first). Returns the paginated envelope
@@ -33,6 +34,15 @@ export async function applyToJob({ cleaningJobPostId, message, resume }) {
     payload = { cleaning_job_post_id: cleaningJobPostId, message: message || null }
   }
   const { data } = await api.post('/applications', payload)
+  return data
+}
+
+// The cleaner's accepted/completed applications for the calendar view (spec
+// 4.9). Unpaginated — a month view needs every accepted/completed job at
+// once — and returned as a bare array, not the usual { data, meta } envelope,
+// since there's no pagination to describe.
+export async function getCalendarEvents() {
+  const { data } = await api.get('/calendar')
   return data
 }
 
