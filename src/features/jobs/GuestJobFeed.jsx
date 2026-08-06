@@ -29,7 +29,13 @@ export default function GuestJobFeed() {
 
   return (
     <div className="mt-6">
-      <JobList isPending={isPending} isError={isError} jobs={jobs} emptyMessage="No jobs available right now." />
+      <JobList
+        isPending={isPending}
+        isError={isError}
+        jobs={jobs}
+        emptyMessage="No jobs available right now."
+        hideStatus
+      />
       {meta && (
         <div className="mt-8">
           <Pagination currentPage={meta.current_page} lastPage={meta.last_page} onPageChange={goToPage} />

@@ -6,6 +6,7 @@ export default function JobList({
   jobs,
   emptyMessage = 'No jobs found.',
   showEmployer = true,
+  hideStatus = false,
   renderCard,
 }) {
   if (isPending) {
@@ -18,12 +19,12 @@ export default function JobList({
     return <p className="text-muted">{emptyMessage}</p>
   }
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-2 2xl:grid-cols-3">
       {jobs.map((job) =>
         renderCard ? (
           renderCard(job)
         ) : (
-          <JobCard key={job.id} job={job} showEmployer={showEmployer} />
+          <JobCard key={job.id} job={job} showEmployer={showEmployer} hideStatus={hideStatus} />
         ),
       )}
     </div>
