@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { MapPin, Calendar, TriangleAlert, Users } from 'lucide-react'
 import PaperCard from '../../components/PaperCard'
+import Badge from '../../components/Badge'
 import RatingSummary from '../../components/RatingSummary'
 import { useAuth } from '../../hooks/useAuth'
 import { formatDate } from '../../lib/helpers/datetime'
@@ -48,8 +49,23 @@ function EmployerAvatar({ name = '' }) {
   )
 }
 
-export default function JobCard({ job, showEmployer = true, notice, footer }) {
+// Neutral outlined chip on purpose: category is metadata, not a status, so it
+// must not compete with the filled status/application badges beside it. Kept
+// local because react-refresh forbids non-component exports from
+// JobStatusBadge.jsx.
+const CATEGORY_BADGE_STYLE = {
+  background: 'rgba(26, 26, 26, 0.05)',
+  color: 'var(--color-foreground)',
+  borderColor: 'var(--border)',
+  borderWidth: '2px',
+}
+
+// `hideStatus` swaps the status badge for the category badge on cleaner-facing
+// listings, where the raw status is noise — `JobDetailView` shows it prominently
+// on click-through.
+export default function JobCard({ job, showEmployer = true, hideStatus = false, notice, footer }) {
   const { user } = useAuth()
+  const showCategoryBadge = hideStatus
   const location = [job.city, job.country].filter(Boolean).join(', ')
   const detailPath = jobDetailPath(job.id, user?.role)
   // Only the owning employer receives applications_count, so its presence is
@@ -66,7 +82,7 @@ export default function JobCard({ job, showEmployer = true, notice, footer }) {
             alignItems: 'flex-start',
             gap: '8px',
             background: 'var(--color-highlight-muted)',
-            border: '1.5px solid var(--color-highlight-strong)',
+            border: '1.5px solid var(--color-caution)',
             borderRadius: 'var(--radius)',
             padding: '0.5rem 0.75rem',
             fontSize: '0.8125rem',
@@ -82,16 +98,18 @@ export default function JobCard({ job, showEmployer = true, notice, footer }) {
         </div>
       )}
 
-      {/* Top row: status badge + category */}
+      {/* Top row: application status badge + post status (or category) badge + category + save icon button */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-          <JobStatusBadge status={job.status} />
           {job.has_applied && (
             <ApplicationStatusBadge status={job.application_status} />
           )}
+          {showCategoryBadge
+            ? <Badge style={CATEGORY_BADGE_STYLE}>{job.category.name}</Badge>
+            : <JobStatusBadge status={job.status} />}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          {job.category?.name && (
+          {!showCategoryBadge && job.category?.name && (
             <span
               style={{
                 fontFamily: 'var(--heading)',

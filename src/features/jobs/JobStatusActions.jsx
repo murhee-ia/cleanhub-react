@@ -10,10 +10,10 @@ import Button from '../../components/Button'
 const NEXT_ACTIONS = {
   open: [
     { status: 'reviewing', label: 'Review now', variant: 'secondary' },
-    { status: 'closed', label: 'Close applications', variant: 'ghost' },
+    { status: 'closed', label: 'Close applications', variant: 'dark' },
   ],
-  reviewing: [{ status: 'closed', label: 'Close applications', variant: 'ghost' }],
-  closed: [{ status: 'completed', label: 'Mark as completed', variant: 'primary' }],
+  reviewing: [{ status: 'closed', label: 'Close applications', variant: 'dark' }],
+  closed: [{ status: 'completed', label: 'Mark as completed', variant: 'complete' }],
   completed: [],
 }
 

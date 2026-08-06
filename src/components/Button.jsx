@@ -28,8 +28,8 @@ const VARIANTS = {
   },
   secondary: {
     style: {
-      background: 'var(--color-highlight)',
-      color: 'var(--color-primary)',
+      background: 'var(--color-highlight-strong)',
+      color: 'var(--color-foreground)',
       border: '2px solid var(--border)',
       borderRadius: 'var(--radius)',
       boxShadow: 'var(--shadow-btn)',
@@ -80,6 +80,44 @@ const VARIANTS = {
     style: {
       background: 'var(--color-danger)',
       color: '#ffffff',
+      border: '2px solid var(--border)',
+      borderRadius: 'var(--radius)',
+      boxShadow: 'var(--shadow-btn)',
+      fontFamily: 'var(--heading)',
+      fontSize: '14px',
+      fontWeight: 700,
+      padding: '8px 18px',
+      cursor: 'pointer',
+    },
+    hover: {
+      boxShadow: '1px 1px 0 #1a1a1a',
+      transform: 'translate(2px, 2px)',
+    },
+  },
+  dark: {
+    style: {
+      background: 'var(--color-surface)',
+      color: 'var(--color-foreground)',
+      border: '2px solid var(--border)',
+      borderRadius: 'var(--radius)',
+      boxShadow: 'var(--shadow-btn)',
+      fontFamily: 'var(--heading)',
+      fontSize: '14px',
+      fontWeight: 600,
+      padding: '7px 16px',
+      cursor: 'pointer',
+    },
+    hover: {
+      background: 'var(--color-foreground)',
+      color: 'var(--color-surface)',
+      boxShadow: '1px 1px 0 #1a1a1a',
+      transform: 'translate(2px, 2px)',
+    },
+  },
+  complete: {
+    style: {
+      background: 'var(--color-highlight-soft)',
+      color: 'var(--color-foreground)',
       border: '2px solid var(--border)',
       borderRadius: 'var(--radius)',
       boxShadow: 'var(--shadow-btn)',

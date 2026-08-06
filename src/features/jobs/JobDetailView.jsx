@@ -85,7 +85,7 @@ export default function JobDetailView({ job }) {
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px', fontSize: '14px', color: 'var(--color-muted)' }}>
           <JobStatusBadge status={job.status} />
           {job.category?.name && (
-            <span style={{ fontFamily: 'var(--heading)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--color-muted)' }}>
+            <span style={{ fontFamily: 'var(--heading)', fontSize: '13px', fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--color-muted)' }}>
               {job.category.name}
             </span>
           )}
@@ -206,25 +206,26 @@ export default function JobDetailView({ job }) {
                     Apply to this job
                   </Button>
                 )}
-                {job.status === 'open' && isCleaner && (
-                  job.has_applied ? (
-                    <Button
-                      type="button"
-                      disabled
-                      className="capitalize"
-                      style={{ width: '100%', padding: '12px' }}
-                    >
-                      Applied · {job.application_status}
-                    </Button>
-                  ) : (
-                    <Button
-                      type="button"
-                      onClick={() => setApplyOpen(true)}
-                      style={{ width: '100%', padding: '12px' }}
-                    >
-                      Apply to this job
-                    </Button>
-                  )
+                {/* Reflects the cleaner's own application, so it stays visible
+                    after the job leaves `open` status. */}
+                {isCleaner && job.has_applied && (
+                  <Button
+                    type="button"
+                    disabled
+                    className="capitalize"
+                    style={{ width: '100%', padding: '12px' }}
+                  >
+                    Applied · {job.application_status}
+                  </Button>
+                )}
+                {job.status === 'open' && isCleaner && !job.has_applied && (
+                  <Button
+                    type="button"
+                    onClick={() => setApplyOpen(true)}
+                    style={{ width: '100%', padding: '12px' }}
+                  >
+                    Apply to this job
+                  </Button>
                 )}
                 {(job.status === 'open' || job.is_saved) && (
                   <SaveJobButton job={job} withLabel style={{ width: '100%', padding: '12px', background: 'transparent', color: 'var(--color-foreground)' }} />

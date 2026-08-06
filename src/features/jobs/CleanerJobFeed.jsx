@@ -108,7 +108,13 @@ export default function CleanerJobFeed() {
       </div>
 
       <div className="mt-2">
-        <JobList isPending={isPending} isError={isError} jobs={jobs} emptyMessage="No jobs match your filters." />
+        <JobList
+          isPending={isPending}
+          isError={isError}
+          jobs={jobs}
+          emptyMessage="No jobs found."
+          hideStatus
+        />
       </div>
 
       {meta && (

@@ -48,7 +48,7 @@ export function Avatar({ src, name, size = 88 }) {
       style={{
         ...box,
         borderRadius: 'var(--radius)',
-        background: 'var(--color-highlight-muted)',
+        background: 'var(--color-highlight-strong)',
         border: '2px solid var(--border)',
         boxShadow: 'var(--shadow-sm)',
         display: 'flex',

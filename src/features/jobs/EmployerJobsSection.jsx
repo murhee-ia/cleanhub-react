@@ -1,14 +1,17 @@
 import { useState } from 'react'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
-import { getEmployerJobs, jobKeys } from '../../api/jobs'
+import { getEmployerJobs, getMyJobs, jobKeys } from '../../api/jobs'
 import Pagination from '../../components/Pagination'
 import JobList from './JobList'
 
-export default function EmployerJobsSection({ employerId }) {
+export default function EmployerJobsSection({ employerId, isOwnProfile = false }) {
   const [page, setPage] = useState(1)
+  const params = page > 1 ? { page } : {}
+  // Employers see their own posts through the private endpoint, so this section
+  // carries the same data (applicant counts, every status) as their dashboard.
   const { data, isPending, isError } = useQuery({
-    queryKey: jobKeys.employerList(employerId, { page }),
-    queryFn: () => getEmployerJobs(employerId, page > 1 ? { page } : {}),
+    queryKey: isOwnProfile ? jobKeys.mineList({ page }) : jobKeys.employerList(employerId, { page }),
+    queryFn: () => (isOwnProfile ? getMyJobs(params) : getEmployerJobs(employerId, params)),
     placeholderData: keepPreviousData,
   })
 

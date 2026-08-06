@@ -9,8 +9,6 @@ import JobCard from '../features/jobs/JobCard'
 import JobList from '../features/jobs/JobList'
 import Pagination from '../components/Pagination'
 
-const CLOSED_NOTICE = 'This job is no longer open.'
-
 function paramsToFilters(searchParams) {
   const filters = {}
   for (const key of ['status', 'page']) {
@@ -81,7 +79,6 @@ export default function MyApplicationsPage() {
             <JobCard
               key={job.id}
               job={job}
-              notice={job.status !== 'open' ? CLOSED_NOTICE : undefined}
               footer={<ApplicationCardFooter application={byJobId.get(job.id)} />}
             />
           )}
