@@ -19,6 +19,14 @@ export default function Modal({ open, onClose, title, size = 'md', children, foo
   const panelRef = useRef(null)
   const titleId = useId()
 
+  // Consumers pass a fresh `onClose` on every render, so it can't be a dependency
+  // of the effect below — re-running it would re-focus the panel (stealing focus
+  // from whatever the user is typing in) on every keystroke.
+  const onCloseRef = useRef(onClose)
+  useEffect(() => {
+    onCloseRef.current = onClose
+  })
+
   useEffect(() => {
     if (!open) return undefined
 
@@ -27,7 +35,7 @@ export default function Modal({ open, onClose, title, size = 'md', children, foo
 
     function handleKeyDown(event) {
       if (event.key === 'Escape') {
-        onClose()
+        onCloseRef.current()
         return
       }
       if (event.key !== 'Tab') return
@@ -53,7 +61,7 @@ export default function Modal({ open, onClose, title, size = 'md', children, foo
       document.body.style.overflow = previousOverflow
       previouslyFocused?.focus?.()
     }
-  }, [open, onClose])
+  }, [open])
 
   if (!open) return null
 
