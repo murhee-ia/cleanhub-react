@@ -5,7 +5,7 @@ import JobCard from '../features/jobs/JobCard'
 import JobList from '../features/jobs/JobList'
 import Pagination from '../components/Pagination'
 
-const CLOSED_NOTICE = 'This job is no longer open — you can no longer apply to it.'
+const CLOSED_NOTICE = 'This job is no longer open, so you cannot apply to it.'
 
 export default function SavedJobsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
