@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { loginSchema } from '../../lib/schemas/auth'
 import { applyServerErrors } from '../../lib/helpers/formErrors'
 import { useAuth } from '../../hooks/useAuth'
-import { roleHome } from '../../lib/helpers/roles'
+import { isPathAllowedForRole, roleHome } from '../../lib/helpers/roles'
 import AuthCard from '../../components/AuthCard'
 import TextField from '../../components/TextField'
 import Button from '../../components/Button'
@@ -24,7 +24,8 @@ export default function LoginPage() {
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: (user) => {
-      const dest = location.state?.from?.pathname ?? roleHome(user?.role)
+      const from = location.state?.from?.pathname
+      const dest = from && isPathAllowedForRole(from, user?.role) ? from : roleHome(user?.role)
       navigate(dest, { replace: true })
     },
     onError: (error) => {
