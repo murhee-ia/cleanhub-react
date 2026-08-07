@@ -18,11 +18,11 @@ import {
   Briefcase,
   User,
   UserPen,
-  Bell,
   LogOut,
   PlusSquare,
 } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
+import NotificationBell from '../features/notifications/NotificationBell'
 
 /* ── Nav definitions ──
  * No `end` flag: active state comes from longest-prefix matching below, which
@@ -210,14 +210,9 @@ export default function Sidebar({ role }) {
 
       {/* ── Bottom: user chip + actions ── */}
       <div className="sidebar-bottom" style={{ paddingBottom: '8px' }}>
-        {/* Notifications */}
-        {/* Outside the role nav, so it matches on its own rather than via `activeTo`. */}
-        <SidebarLink
-          to="/notifications"
-          label="Notifications"
-          icon={Bell}
-          active={isUnder(pathname, '/notifications')}
-        />
+        {/* Notifications — a dropdown, not a plain nav link, so it isn't
+            part of the activeTo/isUnder highlighting scheme below. */}
+        <NotificationBell role={role} />
 
         {/* Log out */}
         <button
