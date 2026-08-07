@@ -20,3 +20,9 @@ export function cleanerProfilePath(cleanerId, role) {
   if (role === ROLES.EMPLOYER) return `/employer/cleaners/${cleanerId}`
   return `/cleaners/${cleanerId}`
 }
+
+// Notifications only exist for signed-in cleaners/employers today — the
+// Sidebar that renders the bell is itself only mounted for those two roles.
+export function notificationsPath(role) {
+  return role === ROLES.EMPLOYER ? '/employer/notifications' : '/cleaner/notifications'
+}

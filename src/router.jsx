@@ -20,6 +20,7 @@ import MyApplicationsPage from './pages/MyApplicationsPage'
 import CalendarPage from './pages/CalendarPage'
 import JobApplicantsPage from './pages/JobApplicantsPage'
 import JobCreatePage from './pages/JobCreatePage'
+import NotificationsPage from './pages/NotificationsPage'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
 import VerifyEmailPage from './pages/auth/VerifyEmailPage'
@@ -74,6 +75,7 @@ export const router = createBrowserRouter([
               { path: 'saved-jobs', element: <SavedJobsPage /> },
               { path: 'applications', element: <MyApplicationsPage /> },
               { path: 'calendar', element: <CalendarPage /> },
+              { path: 'notifications', element: <NotificationsPage /> },
               { path: 'profile', element: <OwnProfilePage view="profile" /> },
               { path: 'profile/edit', element: <OwnProfilePage view="edit" /> },
               // Mirrors the public detail routes so cleaners keep their sidebar.
@@ -91,6 +93,7 @@ export const router = createBrowserRouter([
             element: <EmployerLayout />,
             children: [
               { index: true, element: <PlaceholderPage title="Employer dashboard" /> },
+              { path: 'notifications', element: <NotificationsPage /> },
               { path: 'profile', element: <OwnProfilePage view="profile" /> },
               { path: 'profile/edit', element: <OwnProfilePage view="edit" /> },
               { path: 'jobs', element: <MyJobsPage /> },
