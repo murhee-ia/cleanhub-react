@@ -14,6 +14,7 @@ import {
   Home,
   Bookmark,
   ClipboardList,
+  CalendarDays,
   Briefcase,
   User,
   UserPen,
@@ -30,6 +31,7 @@ const CLEANER_MAIN = [
   { to: '/cleaner', label: 'Home Feed', icon: Home },
   { to: '/cleaner/saved-jobs', label: 'Saved Jobs', icon: Bookmark },
   { to: '/cleaner/applications', label: 'My Applications', icon: ClipboardList },
+  { to: '/cleaner/calendar', label: 'Calendar', icon: CalendarDays },
 ]
 const CLEANER_ACCOUNT = [
   { to: '/cleaner/profile', label: 'My Profile', icon: User },
