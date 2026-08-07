@@ -17,6 +17,7 @@ import Modal from '../../components/Modal'
 import Button from '../../components/Button'
 import TextAreaField from '../../components/TextAreaField'
 import { BoxCard } from '../profile/ProfileLayout'
+import RateButton from '../ratings/RateButton'
 import ApplicationStatusBadge from './ApplicationStatusBadge'
 import ApplicantActions from './ApplicantActions'
 
@@ -88,6 +89,7 @@ export default function ApplicantDrawer({ applicationId, jobPostId, onClose }) {
               jobPostId={jobPostId}
               message={decisionMessage}
             />
+            <RateButton application={application} jobPostId={jobPostId} />
             <Button variant="ghost" type="button" onClick={onClose}>
               Close
             </Button>

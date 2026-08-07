@@ -6,6 +6,7 @@ import { Avatar } from '../profile/ProfileLayout'
 import { formatTimestampDate } from '../../lib/helpers/datetime'
 import { cleanerProfilePath } from '../../lib/helpers/paths'
 import { ROLES } from '../../lib/helpers/roles'
+import RateButton from '../ratings/RateButton'
 import ApplicationStatusBadge from './ApplicationStatusBadge'
 import ApplicantActions from './ApplicantActions'
 
@@ -56,6 +57,7 @@ export default function ApplicantRow({ application, jobPostId, onReview }) {
       </div>
 
       <ApplicantActions application={application} jobPostId={jobPostId} className="shrink-0" />
+      <RateButton application={application} jobPostId={jobPostId} className="shrink-0" />
     </div>
   )
 }
