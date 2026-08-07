@@ -95,9 +95,9 @@ export const router = createBrowserRouter([
               { path: 'profile/edit', element: <OwnProfilePage view="edit" /> },
               { path: 'jobs', element: <MyJobsPage /> },
               { path: 'jobs/new', element: <JobCreatePage /> },
-              { path: 'jobs/:id/applicants', element: <JobApplicantsPage /> },
               // Mirrors the public detail routes so employers keep their sidebar.
               { path: 'jobs/:id', element: <JobDetailPage /> },
+              { path: 'jobs/:id/applicants', element: <JobApplicantsPage /> },
               { path: 'cleaners/:id', element: <ProfileViewPage role="cleaner" /> },
             ],
           },
