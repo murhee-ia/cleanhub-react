@@ -23,7 +23,8 @@ export function isPathAllowedForRole(urlPath, userRole) {
   return !protectedArea || protectedArea.roles.includes(userRole)
 }
 
-// Where each role lands after login. Moderators and admins share the admin area.
+// Where each role lands after login. A moderator lands in the moderation area
+// (they can't reach the admin-only panel); the admin lands in the admin panel.
 export function roleHome(role) {
   switch (role) {
     case ROLES.CLEANER:
@@ -31,6 +32,7 @@ export function roleHome(role) {
     case ROLES.EMPLOYER:
       return '/employer'
     case ROLES.MODERATOR:
+      return '/moderator'
     case ROLES.ADMIN:
       return '/admin'
     default:

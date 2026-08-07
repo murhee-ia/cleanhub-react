@@ -4,6 +4,7 @@ import { Star } from 'lucide-react'
 import { getCleanerRatings, getEmployerRatings, ratingKeys } from '../../api/ratings'
 import { formatTimestampDate } from '../../lib/helpers/datetime'
 import Pagination from '../../components/Pagination'
+import ReportButton from '../reports/ReportButton'
 
 const FETCH_BY_ROLE = {
   cleaner: getCleanerRatings,
@@ -35,6 +36,9 @@ function ReviewRow({ rating, isLast }) {
       </div>
       <p className="text-sm font-medium text-foreground">{rating.reviewer.full_name}</p>
       {rating.text && <p className="text-sm whitespace-pre-line text-foreground">{rating.text}</p>}
+      <div className="mt-0.5 flex justify-end">
+        <ReportButton reportableType="rating" reportableId={rating.id} size="sm" />
+      </div>
     </div>
   )
 }
