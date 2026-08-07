@@ -4,8 +4,6 @@ function formatRating(value) {
   return value.toFixed(1).replace(/\.0$/, '')
 }
 
-// rating_average is null and rating_count 0 until the Phase 7 ratings work
-// lands; the resource shape won't change, so this just swaps its own copy then.
 // variant controls rendering:
 //   'label' (default) — single star + average + "(N reviews)", or "No ratings yet"
 //   'stars' — number • five stars with dynamic fill (floor of the average), used by JobCard

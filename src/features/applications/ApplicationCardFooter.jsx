@@ -1,5 +1,6 @@
 import { FileText, MessageSquare } from 'lucide-react'
 import { formatTimestampDate } from '../../lib/helpers/datetime'
+import RateButton from '../ratings/RateButton'
 import WithdrawButton from './WithdrawButton'
 
 // The application-side detail shown under a JobCard on the cleaner's list: what
@@ -41,6 +42,7 @@ export default function ApplicationCardFooter({ application }) {
       )}
 
       {application.status === 'pending' && <WithdrawButton application={application} />}
+      <RateButton application={application} className="w-full" />
     </div>
   )
 }

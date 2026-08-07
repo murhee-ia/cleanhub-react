@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Globe, Tag, FileText, CheckCircle } from 'lucide-react'
+import { MapPin, Globe, Tag, FileText, CheckCircle, Star } from 'lucide-react'
 import PaperCard from '../../components/PaperCard'
 import RatingSummary from '../../components/RatingSummary'
+import ReviewsSection from '../ratings/ReviewsSection'
 import DocumentList from './DocumentList'
 import { Avatar, Stat, TagList, BoxCard } from './ProfileLayout'
 
@@ -99,6 +100,10 @@ export default function CleanerProfileView({ profile, isOwnProfile = false }) {
 
             <BoxCard icon={FileText} title="Documents & Certifications">
               <DocumentList documents={profile.documents} />
+            </BoxCard>
+
+            <BoxCard icon={Star} title="Reviews">
+              <ReviewsSection role="cleaner" userId={profile.user_id} />
             </BoxCard>
 
           </div>

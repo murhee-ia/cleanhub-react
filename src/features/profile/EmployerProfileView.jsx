@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
-import { MapPin, Info, Phone, FileText, Briefcase } from 'lucide-react'
+import { MapPin, Info, Phone, FileText, Briefcase, Star } from 'lucide-react'
 import PaperCard from '../../components/PaperCard'
 import RatingSummary from '../../components/RatingSummary'
 import EmployerJobsSection from '../jobs/EmployerJobsSection'
+import ReviewsSection from '../ratings/ReviewsSection'
 import DocumentList from './DocumentList'
 import { Avatar, Stat, BoxCard } from './ProfileLayout'
 
@@ -117,6 +118,10 @@ export default function EmployerProfileView({ profile, isOwnProfile = false }) {
 
           <BoxCard icon={Briefcase} title="Job Posts">
             <EmployerJobsSection employerId={profile.user_id} isOwnProfile={isOwnProfile} />
+          </BoxCard>
+
+          <BoxCard icon={Star} title="Reviews">
+            <ReviewsSection role="employer" userId={profile.user_id} />
           </BoxCard>
 
         </div>
