@@ -4,6 +4,7 @@ import PaperCard from '../../components/PaperCard'
 import RatingSummary from '../../components/RatingSummary'
 import EmployerJobsSection from '../jobs/EmployerJobsSection'
 import ReviewsSection from '../ratings/ReviewsSection'
+import ReportButton from '../reports/ReportButton'
 import DocumentList from './DocumentList'
 import { Avatar, Stat, BoxCard } from './ProfileLayout'
 
@@ -71,6 +72,12 @@ export default function EmployerProfileView({ profile, isOwnProfile = false }) {
                 >
                   ✏ Edit profile
                 </Link>
+              </div>
+            )}
+
+            {!isOwnProfile && (
+              <div style={{ marginTop: '4px', display: 'flex', justifyContent: 'center' }}>
+                <ReportButton reportableType="user" reportableId={profile.user_id} />
               </div>
             )}
           </div>

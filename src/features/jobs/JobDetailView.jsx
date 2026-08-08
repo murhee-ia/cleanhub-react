@@ -21,6 +21,7 @@ import JobStatusBadge from './JobStatusBadge'
 import SaveJobButton from './SaveJobButton'
 import JobStatusActions from './JobStatusActions'
 import ApplyModal from '../applications/ApplyModal'
+import ReportButton from '../reports/ReportButton'
 
 function SectionHeader({ icon: Icon, title }) {
   return (
@@ -61,6 +62,10 @@ export default function JobDetailView({ job }) {
   // Applying is cleaner-only. Employers (including on their own post) and
   // moderators/admins get no Apply button — the backend policy is the real gate.
   const isCleaner = isAuthenticated && user?.role === ROLES.CLEANER
+
+  // The owner manages the post (JobStatusActions) rather than reporting it; a
+  // guest clicking Report is bounced to /login by the button itself.
+  const isOwner = isAuthenticated && user?.id === job.employer?.id
 
   const location = [job.address, job.city, job.country].filter(Boolean).join(', ')
   const scheduleDate = formatDate(job.schedule_date)
@@ -229,6 +234,9 @@ export default function JobDetailView({ job }) {
                 )}
                 {(job.status === 'open' || job.is_saved) && (
                   <SaveJobButton job={job} withLabel style={{ width: '100%', padding: '12px', background: 'transparent', color: 'var(--color-foreground)' }} />
+                )}
+                {!isOwner && (
+                  <ReportButton reportableType="job_post" reportableId={job.id} className="w-full" />
                 )}
               </div>
             </PaperCard>

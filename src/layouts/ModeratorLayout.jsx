@@ -1,9 +1,8 @@
-import { Outlet } from 'react-router-dom'
+import { Flag } from 'lucide-react'
+import ConsoleShell from '../components/ConsoleShell'
+
+const LINKS = [{ to: '/moderator', label: 'Reports', icon: Flag, end: true }]
 
 export default function ModeratorLayout() {
-  return (
-    <div className="min-h-screen">
-      <Outlet />
-    </div>
-  )
+  return <ConsoleShell title="Moderation" links={LINKS} />
 }

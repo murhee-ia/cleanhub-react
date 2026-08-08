@@ -3,6 +3,7 @@ import { MapPin, Globe, Tag, FileText, CheckCircle, Star } from 'lucide-react'
 import PaperCard from '../../components/PaperCard'
 import RatingSummary from '../../components/RatingSummary'
 import ReviewsSection from '../ratings/ReviewsSection'
+import ReportButton from '../reports/ReportButton'
 import DocumentList from './DocumentList'
 import { Avatar, Stat, TagList, BoxCard } from './ProfileLayout'
 
@@ -69,6 +70,12 @@ export default function CleanerProfileView({ profile, isOwnProfile = false }) {
                   >
                     ✏ Edit profile
                   </Link>
+                </div>
+              )}
+
+              {!isOwnProfile && (
+                <div style={{ marginTop: '4px', display: 'flex', justifyContent: 'center' }}>
+                  <ReportButton reportableType="user" reportableId={profile.user_id} />
                 </div>
               )}
             </div>

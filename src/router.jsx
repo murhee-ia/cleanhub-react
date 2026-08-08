@@ -21,6 +21,14 @@ import CalendarPage from './pages/CalendarPage'
 import JobApplicantsPage from './pages/JobApplicantsPage'
 import JobCreatePage from './pages/JobCreatePage'
 import NotificationsPage from './pages/NotificationsPage'
+import ModeratorReportsPage from './pages/ModeratorReportsPage'
+import AdminOverviewPage from './pages/AdminOverviewPage'
+import AdminUsersPage from './pages/AdminUsersPage'
+import AdminJobsPage from './pages/AdminJobsPage'
+import AdminCategoriesPage from './pages/AdminCategoriesPage'
+import AdminModeratorsPage from './pages/AdminModeratorsPage'
+import AdminSettingsPage from './pages/AdminSettingsPage'
+import AdminAuditLogPage from './pages/AdminAuditLogPage'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
 import VerifyEmailPage from './pages/auth/VerifyEmailPage'
@@ -112,7 +120,7 @@ export const router = createBrowserRouter([
         children: [
           {
             element: <ModeratorLayout />,
-            children: [{ index: true, element: <PlaceholderPage title="Moderator dashboard" /> }],
+            children: [{ index: true, element: <ModeratorReportsPage /> }],
           },
         ],
       },
@@ -122,7 +130,15 @@ export const router = createBrowserRouter([
         children: [
           {
             element: <AdminLayout />,
-            children: [{ index: true, element: <PlaceholderPage title="Admin dashboard" /> }],
+            children: [
+              { index: true, element: <AdminOverviewPage /> },
+              { path: 'users', element: <AdminUsersPage /> },
+              { path: 'jobs', element: <AdminJobsPage /> },
+              { path: 'categories', element: <AdminCategoriesPage /> },
+              { path: 'moderators', element: <AdminModeratorsPage /> },
+              { path: 'settings', element: <AdminSettingsPage /> },
+              { path: 'audit-logs', element: <AdminAuditLogPage /> },
+            ],
           },
         ],
       },
