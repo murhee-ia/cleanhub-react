@@ -56,3 +56,11 @@ export async function updateJobStatus(id, status) {
   const { data } = await api.patch(`/cleaning-job-posts/${id}`, { status })
   return data
 }
+
+// Publish a draft post (employer-only). Patches `visibility` from `draft` to
+// `published`, making the post visible to cleaners and guests. 
+// Returns the updated job.
+export async function publishJob(id) {
+  const { data } = await api.patch(`/cleaning-job-posts/${id}`, { visibility: 'published' })
+  return data
+}
