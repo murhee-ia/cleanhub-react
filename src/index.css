@@ -539,7 +539,7 @@ textarea:focus {
   }
 }
 
-/* FullCalendar neo-brutalist skin (cleaner calendar, Phase 6) */
+/* FullCalendar neo-brutalist skin (cleaner calendar) */
 .fc {
   font-family: var(--font-sans);
   --fc-border-color: var(--border-soft);

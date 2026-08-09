@@ -1,11 +1,11 @@
 // Client-side mirror of ApplicationController::timeWindowsOverlap on the
-// backend — a UX nicety only, the backend's 409 is the real enforcement (see
-// root CLAUDE.md's "warn client-side, validate server-side" rule). A missing
+// backend — a UX nicety only, the backend's 409 is the real enforcement 
+// ("warn client-side, validate server-side" rule). A missing
 // start/end time on either side means that job isn't scoped to a sub-day
 // window, so it's treated as occupying the whole day.
-function timeWindowsOverlap(a, b) {
-  if (!a.start_time || !a.end_time || !b.start_time || !b.end_time) return true
-  return a.start_time < b.end_time && b.start_time < a.end_time
+function timeWindowsOverlap(existingJob, targetJob) {
+  if (!existingJob.start_time || !existingJob.end_time || !targetJob.start_time || !targetJob.end_time) return true
+  return existingJob.start_time < targetJob.end_time && targetJob.start_time < existingJob.end_time
 }
 
 // Finds the cleaner's already-accepted job (if any) whose schedule overlaps

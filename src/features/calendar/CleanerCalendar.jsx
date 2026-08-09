@@ -6,7 +6,7 @@ import { jobDetailPath } from '../../lib/helpers/paths'
 import { ROLES } from '../../lib/helpers/roles'
 
 // Month view of the cleaner's accepted/completed jobs. Clicking an event opens
-// the job detail page (Phase 5's view), which already shows the cleaner's own
+// the job detail page, which already shows the cleaner's own
 // application status — no separate detail modal needed.
 export default function CleanerCalendar({ events }) {
   const navigate = useNavigate()
@@ -15,7 +15,7 @@ export default function CleanerCalendar({ events }) {
     <FullCalendar
       plugins={[dayGridPlugin, interactionPlugin]}
       initialView="dayGridMonth"
-      headerToolbar={{ left: 'prev,next today', center: 'title', right: '' }}
+      headerToolbar={{ left: 'prev,next', center: 'title', right: 'today' }}
       height="auto"
       events={events}
       eventClick={(info) => {

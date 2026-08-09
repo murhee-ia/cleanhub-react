@@ -37,8 +37,8 @@ export async function applyToJob({ cleaningJobPostId, message, resume }) {
   return data
 }
 
-// The cleaner's accepted/completed applications for the calendar view (spec
-// 4.9). Unpaginated — a month view needs every accepted/completed job at
+// The cleaner's accepted/completed applications for the calendar view
+// Unpaginated — a month view needs every accepted/completed job at
 // once — and returned as a bare array, not the usual { data, meta } envelope,
 // since there's no pagination to describe.
 export async function getCalendarEvents() {
