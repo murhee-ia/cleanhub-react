@@ -113,7 +113,7 @@ export default function CleanerJobFeed() {
           isError={isError}
           jobs={jobs}
           emptyMessage="No jobs found."
-          hideStatus
+          hideJobStatus
         />
       </div>
 

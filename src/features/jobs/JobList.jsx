@@ -6,7 +6,7 @@ export default function JobList({
   jobs,
   emptyMessage = 'No jobs found.',
   showEmployer = true,
-  hideStatus = false,
+  hideJobStatus = false,
   renderCard,
 }) {
   if (isPending) {
@@ -24,7 +24,7 @@ export default function JobList({
         renderCard ? (
           renderCard(job)
         ) : (
-          <JobCard key={job.id} job={job} showEmployer={showEmployer} hideStatus={hideStatus} />
+          <JobCard key={job.id} job={job} showEmployer={showEmployer} hideJobStatus={hideJobStatus} />
         ),
       )}
     </div>

@@ -45,9 +45,10 @@ export default function SavedJobsPage() {
           jobs={jobs}
           emptyMessage="You haven't saved any jobs yet."
           renderCard={(job) => (
-            <JobCard
+          <JobCard
               key={job.id}
               job={job}
+              hideApplicationStatus
               notice={job.status !== 'open' ? CLOSED_NOTICE : undefined}
             />
           )}

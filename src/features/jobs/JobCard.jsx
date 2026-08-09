@@ -60,12 +60,21 @@ const CATEGORY_BADGE_STYLE = {
   borderWidth: '2px',
 }
 
-// `hideStatus` swaps the status badge for the category badge on cleaner-facing
+// `hideJobStatus` swaps the status badge for the category badge on cleaner-facing
 // listings, where the raw status is noise — `JobDetailView` shows it prominently
 // on click-through.
-export default function JobCard({ job, showEmployer = true, hideStatus = false, notice, footer }) {
+// `hideApplicationStatus` suppresses the application badge on pages that only
+// care about the job post status (e.g. Saved Jobs).
+export default function JobCard({
+  job,
+  showEmployer = true,
+  hideJobStatus = false,
+  hideApplicationStatus = false,
+  notice,
+  footer
+}) {
   const { user } = useAuth()
-  const showCategoryBadge = hideStatus
+  const showCategoryBadge = hideJobStatus || hideApplicationStatus
   const location = [job.city, job.country].filter(Boolean).join(', ')
   const detailPath = jobDetailPath(job.id, user?.role)
   // Only the owning employer receives applications_count, so its presence is
@@ -101,12 +110,15 @@ export default function JobCard({ job, showEmployer = true, hideStatus = false, 
       {/* Top row: application status badge + post status (or category) badge + category + save icon button */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-          {job.has_applied && (
+          {!hideApplicationStatus && job.has_applied && (
             <ApplicationStatusBadge status={job.application_status} />
           )}
-          {showCategoryBadge
-            ? <Badge style={CATEGORY_BADGE_STYLE}>{job.category.name}</Badge>
-            : <JobStatusBadge status={job.status} />}
+          {!hideJobStatus && (
+            <JobStatusBadge status={job.status} />
+          )}
+          {showCategoryBadge && (
+            <Badge style={CATEGORY_BADGE_STYLE}>{job.category.name}</Badge>
+          )}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           {!showCategoryBadge && job.category?.name && (
