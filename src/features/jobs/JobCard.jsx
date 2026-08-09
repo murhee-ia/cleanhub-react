@@ -110,14 +110,14 @@ export default function JobCard({
       {/* Top row: application status badge + post status (or category) badge + category + save icon button */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-          {!hideApplicationStatus && job.has_applied && (
-            <ApplicationStatusBadge status={job.application_status} />
-          )}
           {!hideJobStatus && (
             <JobStatusBadge status={job.status} />
           )}
           {showCategoryBadge && (
             <Badge style={CATEGORY_BADGE_STYLE}>{job.category.name}</Badge>
+          )}
+          {!hideApplicationStatus && job.has_applied && (
+            <ApplicationStatusBadge status={job.application_status} />
           )}
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>

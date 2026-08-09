@@ -49,7 +49,7 @@ export default function SavedJobsPage() {
               key={job.id}
               job={job}
               hideApplicationStatus
-              notice={job.status !== 'open' ? CLOSED_NOTICE : undefined}
+              notice={job.status !== 'open' && !job.has_applied ? CLOSED_NOTICE : undefined}
             />
           )}
         />
