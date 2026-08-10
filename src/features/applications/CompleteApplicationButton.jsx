@@ -18,6 +18,7 @@ export default function CompleteApplicationButton({ application, className = '' 
         type="button"
         onClick={() => setOpen(true)}
         className={className}
+        style={{ background: 'var(--color-highlight)' }}
       >
         <CheckCircle className="size-4 shrink-0" aria-hidden="true" />
         Mark as complete
