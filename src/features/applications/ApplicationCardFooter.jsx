@@ -1,7 +1,8 @@
-import { FileText, MessageSquare } from 'lucide-react'
+import { FileText, MessageSquare, Clock } from 'lucide-react'
 import { formatTimestampDate } from '../../lib/helpers/datetime'
 import RateButton from '../ratings/RateButton'
 import WithdrawButton from './WithdrawButton'
+import CompleteApplicationButton from './CompleteApplicationButton'
 
 // The application-side detail shown under a JobCard on the cleaner's list: what
 // they sent, and the withdraw action while the application is still pending.
@@ -42,6 +43,21 @@ export default function ApplicationCardFooter({ application }) {
       )}
 
       {application.status === 'pending' && <WithdrawButton application={application} />}
+
+      {/* Cleaner marks their side complete (accepted applications only) */}
+      <CompleteApplicationButton application={application} className="w-full" />
+
+      {/* Indicator: cleaner has marked complete, but employer hasn't yet */}
+      {application.status === 'completed' && application.job_completed === false && (
+        <p
+          className="text-xs flex items-center gap-1.5"
+          style={{ color: 'var(--color-muted)', fontStyle: 'italic' }}
+        >
+          <Clock className="size-3 shrink-0" aria-hidden="true" />
+          Awaiting employer's completion mark
+        </p>
+      )}
+
       <RateButton application={application} className="w-full" />
     </div>
   )

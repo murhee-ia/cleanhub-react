@@ -86,3 +86,13 @@ export async function updateApplicationNote(id, note) {
   const { data } = await api.patch(`/applications/${id}/note`, { note })
   return data
 }
+
+// The cleaner marks their side of the job as complete by uploading a proof
+// file (photo or PDF). The backend stores the file and transitions the
+// application status to `completed`, unlocking the cleaner's ability to rate.
+export async function completeApplication(id, proofFile) {
+  const payload = new FormData()
+  payload.append('proof', proofFile)
+  const { data } = await api.post(`/applications/${id}/complete`, payload)
+  return data
+}
