@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
-import { Star } from 'lucide-react'
+import { Star, Clock } from 'lucide-react'
 import { getCleanerRatings, getEmployerRatings, ratingKeys } from '../../api/ratings'
 import { formatTimestampDate } from '../../lib/helpers/datetime'
 import Pagination from '../../components/Pagination'
@@ -17,11 +17,26 @@ const KEY_BY_ROLE = {
 }
 
 function ReviewRow({ rating, isLast }) {
+  const job = rating.job_post
+
   return (
     <div
       className="flex flex-col gap-1.5 py-4 first:pt-0"
       style={isLast ? undefined : { borderBottom: '1.5px solid rgba(0,0,0,0.1)' }}
     >
+      {/* Job post context */}
+      {job && (
+        <p
+          className="text-xs font-semibold uppercase tracking-wider"
+          style={{ color: 'var(--color-muted)' }}
+        >
+          {job.title}
+          {job.schedule_date && ` · ${job.schedule_date}`}
+          {job.city && ` · ${job.city}`}
+          {job.country && ` · ${job.country}`}
+        </p>
+      )}
+
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-1">
           {Array.from({ length: 5 }).map((_, i) => (
@@ -36,6 +51,20 @@ function ReviewRow({ rating, isLast }) {
       </div>
       <p className="text-sm font-medium text-foreground">{rating.reviewer.full_name}</p>
       {rating.text && <p className="text-sm whitespace-pre-line text-foreground">{rating.text}</p>}
+
+      {/* Pending-completion indicator: only shown when the other party hasn't marked their side done */}
+      {rating.other_side_completed === false && (
+        <p
+          className="text-xs flex items-center gap-1.5 mt-0.5"
+          style={{ color: 'var(--color-muted)', fontStyle: 'italic' }}
+        >
+          <Clock className="size-3 shrink-0" aria-hidden="true" />
+          {rating.reviewer.role === 'cleaner'
+            ? `${rating.reviewee?.full_name} hasn't marked this job complete yet`
+            : `${rating.reviewee?.full_name} hasn't marked this job complete yet`}
+        </p>
+      )}
+
       <div className="mt-0.5 flex justify-end">
         <ReportButton reportableType="rating" reportableId={rating.id} size="sm" />
       </div>
