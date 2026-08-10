@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateJobStatus, publishJob, jobKeys } from '../../api/jobs'
 import { useAuth } from '../../hooks/useAuth'
 import { ROLES } from '../../lib/helpers/roles'
 import Button from '../../components/Button'
+import CompleteJobPostModal from './CompleteJobPostModal'
 
 // The forward-only flow the backend enforces: a post may skip ahead but never
 // move back, and `completed` is terminal. Statuses absent from this map (a
@@ -25,9 +27,12 @@ const FULL_WIDTH = { width: '100%', padding: '12px' }
 //
 // For draft posts, shows a "Publish job" button that transitions visibility from
 // draft → published. For published posts, shows the forward-only status actions.
+// The `completed` transition is special: it opens a modal that requires a proof
+// file upload before the status change is submitted.
 export default function JobStatusActions({ job }) {
   const { user } = useAuth()
   const queryClient = useQueryClient()
+  const [completeModalOpen, setCompleteModalOpen] = useState(false)
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: jobKeys.detail(job.id) })
@@ -80,20 +85,40 @@ export default function JobStatusActions({ job }) {
   // boxed section. The post's status is already badged at the top of the page.
   return (
     <>
-      {actions.map((action) => (
-        <Button
-          key={action.status}
-          type="button"
-          variant={action.variant}
-          onClick={() => statusMutation.mutate(action.status)}
-          disabled={statusMutation.isPending}
-          style={FULL_WIDTH}
-        >
-          {action.label}
-        </Button>
-      ))}
+      {actions.map((action) =>
+        action.status === 'completed' ? (
+          // Completing requires proof upload — open the dedicated modal instead
+          // of firing the status PATCH directly.
+          <Button
+            key="completed"
+            type="button"
+            variant={action.variant}
+            onClick={() => setCompleteModalOpen(true)}
+            style={FULL_WIDTH}
+          >
+            {action.label}
+          </Button>
+        ) : (
+          <Button
+            key={action.status}
+            type="button"
+            variant={action.variant}
+            onClick={() => statusMutation.mutate(action.status)}
+            disabled={statusMutation.isPending}
+            style={FULL_WIDTH}
+          >
+            {action.label}
+          </Button>
+        )
+      )}
 
       {statusErrorMessage && <p className="text-sm text-danger">{statusErrorMessage}</p>}
+
+      <CompleteJobPostModal
+        job={job}
+        open={completeModalOpen}
+        onClose={() => setCompleteModalOpen(false)}
+      />
     </>
   )
 }
