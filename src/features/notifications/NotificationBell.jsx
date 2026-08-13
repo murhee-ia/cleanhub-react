@@ -20,19 +20,13 @@ export default function NotificationBell({ role }) {
   const buttonRef = useRef(null)
   const panelRef = useRef(null)
 
-  const badgeQuery = useQuery({
+  const unreadQuery = useQuery({
     queryKey: notificationKeys.list({ unread_only: true }),
     queryFn: () => getNotifications({ unread_only: true }),
     refetchInterval: POLL_MS,
   })
-  const unreadCount = badgeQuery.data?.meta?.total ?? 0
-
-  const listQuery = useQuery({
-    queryKey: notificationKeys.list({}),
-    queryFn: () => getNotifications({}),
-    enabled: open,
-  })
-  const notifications = listQuery.data?.data ?? []
+  const unreadCount = unreadQuery.data?.meta?.total ?? 0
+  const notifications = unreadQuery.data?.data ?? []
 
   const openNotification = useOpenNotification(role)
   const markAllRead = useMarkAllNotificationsRead()
@@ -148,7 +142,7 @@ export default function NotificationBell({ role }) {
             </div>
 
             <div style={{ overflowY: 'auto' }}>
-              {listQuery.isPending ? (
+              {unreadQuery.isPending ? (
                 <p className="p-4 text-sm text-muted">Loading…</p>
               ) : notifications.length ? (
                 notifications.map((notification) => (

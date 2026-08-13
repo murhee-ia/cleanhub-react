@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { queryClient } from '../lib/queryClient'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -16,7 +17,9 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      queryClient.clear()
       localStorage.removeItem('access_token')
+      localStorage.removeItem('auth_user')
       if (!window.location.pathname.startsWith('/login')) {
         window.location.assign('/login')
       }
