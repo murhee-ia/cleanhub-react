@@ -1,6 +1,8 @@
 # Frontend API Layer
 
-This documents how the React app consumes the CleanHub auth API: the exact JSON it **sends** and **receives**, and where each request is triggered, where the response goes, and how the data is used.
+This documents how the React app consumes the CleanHub API: the exact JSON it
+**sends** and **receives**, where each request is triggered, where the response
+goes, and how the data is used.
 
 The backend's [`cleanhub-laravel/docs/api.md`](../../cleanhub-laravel/docs/api.md) is the canonical contract and already explains *what* every field and status code means. The JSON blocks below are shown as illustrative samples to see the shapes at a glance. What this doc adds is the **frontend data flow**: request → response → where it lands → how it's used.
 
@@ -20,14 +22,18 @@ api.interceptors.request.use((config) => {
 })
 ```
 
-**Response interceptor** — on any `401`, clears the token and redirects to `/login` (status-code only; it never reads the body):
+**Response interceptor** — on any `401`, clears cached server data and both
+stored session values, then redirects to `/login` (status-code only; it never
+reads the body):
 
 ```js
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      queryClient.clear()
       localStorage.removeItem('access_token')
+      localStorage.removeItem('auth_user')
       if (!window.location.pathname.startsWith('/login')) {
         window.location.assign('/login')
       }
@@ -128,7 +134,13 @@ Error — `422` (bad credentials — note it lands under `email`, not a `401`):
 }
 ```
 
-**Flow:** triggered by the `LoginPage` submit → `useAuth().login`. The received session is persisted exactly like register, then `onSuccess` reads `user.role` and redirects via `roleHome(user.role)` (`lib/roles.js`): cleaner → `/cleaner`, employer → `/employer`, moderator/admin → `/admin` — unless the user was bounced here from a protected page, in which case they return to that original location. The bad-credentials `422` is mapped to the Email field, so it reads as an inline error instead of tripping the redirect interceptor.
+**Flow:** triggered by the `LoginPage` submit → `useAuth().login`. The received
+session is persisted exactly like register, then `onSuccess` reads `user.role`
+and redirects through `roleHome(user.role)` in `lib/helpers/roles.js`. In this
+document's scope, cleaner → `/cleaner` and employer → `/employer`. If the user
+was bounced from an allowed protected page, they return to that location. The
+bad-credentials `422` maps to the Email field instead of tripping the global
+`401` interceptor.
 
 ### `logout()`
 
@@ -138,7 +150,11 @@ Sends no body (identified by the bearer token). Success — `200`:
 { "message": "Logged out." }
 ```
 
-**Flow:** triggered by `useAuth().logout` → best-effort POST to revoke the token server-side. Regardless of the outcome, `access_token` and `auth_user` are removed from `localStorage` and React state is cleared, returning the app to a logged-out view. (No UI trigger is wired yet — see `testing.md`.)
+**Flow:** triggered by the sidebar's **Log out** action through
+`useAuth().logout` → best-effort POST to revoke the token server-side.
+Regardless of the outcome, `access_token` and `auth_user` are removed from
+`localStorage`, the TanStack Query cache and React session state are cleared,
+and the user returns to the public home page.
 
 ### `resendVerification()`
 
@@ -202,7 +218,7 @@ Two paths, by kind of failure:
 
 **`401` — handled globally.** The `api/client.js` response interceptor catches every `401`, clears the token, and redirects to `/login`; no component handles expired sessions itself. Bad *login* credentials are `422` (not `401`), so they never hit this path.
 
-**`422` — handled per form.** Validation failures (`{ message, errors: { field: [msg] } }`) are mapped onto React Hook Form field errors by `lib/formErrors.js`:
+**`422` — handled per form.** Validation failures (`{ message, errors: { field: [msg] } }`) are mapped onto React Hook Form field errors by `lib/helpers/formErrors.js`:
 
 ```js
 export function applyServerErrors(error, setError) {
@@ -268,6 +284,8 @@ const { data: categories = [] } = useQuery({
 | `getJob(id)` | `GET /cleaning-job-posts/{id}` | *(nothing)* | one job post |
 | `createJob(payload)` | `POST /cleaning-job-posts` | `FormData` (fields + optional `media[]`) | the created post |
 | `updateJobStatus(id, status)` | `PATCH /cleaning-job-posts/{id}` | `{ status }` | the updated post |
+| `publishJob(id)` | `PATCH /cleaning-job-posts/{id}` | `{ visibility: 'published' }` | the updated post |
+| `completeJobPost(id, proofFile)` | `PATCH /cleaning-job-posts/{id}` | `FormData` with `status=completed` + proof | the updated post |
 
 ### `getJobs(params)`
 
@@ -426,15 +444,24 @@ const { mutate, isPending, error } = useMutation({
 const actions = NEXT_ACTIONS[job.status] ?? []
 ```
 
-Each rendered button calls `mutate` with its own target status — the click is the only place `status` is actually chosen:
+Ordinary transitions call `updateJobStatus`. The completed transition is kept
+out of that JSON-only mutation: it opens `CompleteJobPostModal`, requires a
+photo/PDF, and calls `completeJobPost` with multipart data. Publishing a draft
+similarly uses the dedicated `publishJob` function.
 
 ```jsx
-{actions.map((action) => (
-  <Button key={action.status} type="button" onClick={() => mutate(action.status)} disabled={isPending}>
-    {action.label}
-  </Button>
-))}
+{action.status === 'completed' ? (
+  <Button onClick={() => setCompleteModalOpen(true)}>Mark as completed</Button>
+) : (
+  <Button onClick={() => statusMutation.mutate(action.status)}>{action.label}</Button>
+)}
+
+<CompleteJobPostModal job={job} open={completeModalOpen} onClose={closeModal} />
 ```
+
+`CompleteJobPostModal` invalidates the job detail, employer list, and public
+lists after success. Completing the job post does not complete accepted
+applications; cleaners have their own proof flow below.
 
 ## Profile (`api/profile.js`)
 
@@ -557,6 +584,7 @@ function handleClick() {
 | `acceptApplication(id, message)` | `PATCH /applications/{id}/accept` | `{ message }` | the updated application |
 | `rejectApplication(id, message)` | `PATCH /applications/{id}/reject` | `{ message }` | the updated application |
 | `updateApplicationNote(id, note)` | `PATCH /applications/{id}/note` | `{ note }` | the updated application |
+| `completeApplication(id, proofFile)` | `POST /applications/{id}/complete` | `FormData` with `proof` | the completed application |
 | `getCalendarEvents()` | `GET /calendar` | *(nothing)* | a bare array of accepted/completed applications, not the paginated envelope |
 
 ### `getMyApplications(params)`
@@ -748,6 +776,30 @@ The form's own submit is what actually fires it — React Hook Form's `values` i
 </form>
 ```
 
+### `completeApplication(id, proofFile)`
+
+**Flow:** `CompleteApplicationButton` appears only while the cleaner's
+application is `accepted`. It opens a dedicated proof modal; the submit action
+posts one image/PDF as `proof`, then invalidates the cleaner's application
+lists, calendar, and public profile cache.
+
+```js
+export async function completeApplication(id, proofFile) {
+  const payload = new FormData()
+  payload.append('proof', proofFile)
+  const { data } = await api.post(`/applications/${id}/complete`, payload)
+  return data
+}
+```
+
+On success, `application.status` becomes `completed`,
+`completion_proof_url` is populated, and the cleaner's rating button unlocks.
+`application.job_completed` remains a separate indicator of the employer's
+job-post completion. The two sides can complete in either order.
+
+The modal accepts JPG/JPEG, PNG, WEBP, GIF, or PDF and displays the backend's
+`errors.proof` message when server validation rejects the file.
+
 ### `getCalendarEvents()`
 
 **Flow:** `CalendarPage` takes no filters at all — the whole point of this endpoint is that it always returns everything relevant in one shot — and maps the raw array straight into FullCalendar's event shape:
@@ -796,3 +848,106 @@ export function toCalendarEvent(application) {
 ```
 
 Clicking an event navigates to that job's existing detail page rather than opening a second, separate "event detail" surface. The same query also powers `ApplyModal`'s proactive overlap warning described above — both reads share the one `applicationKeys.calendar()` cache entry.
+
+## Ratings (`api/ratings.js`)
+
+| Function | Method + endpoint | Sends | Receives |
+|---|---|---|---|
+| `getCleanerRatings(id, params)` | `GET /cleaners/{id}/ratings` | pagination params | visible reviews in `{ data, links, meta }` |
+| `getEmployerRatings(id, params)` | `GET /employers/{id}/ratings` | pagination params | visible reviews in `{ data, links, meta }` |
+| `submitRating({ applicationId, stars, text })` | `POST /ratings` | `{ application_id, stars, text }` | created rating |
+
+`ratingKeys` normalizes profile ids and keeps cleaner/employer review lists
+separate:
+
+```js
+export const ratingKeys = {
+  all: ['ratings'],
+  lists: () => [...ratingKeys.all, 'list'],
+  cleanerList: (id, filters) => [...ratingKeys.lists(), 'cleaner', String(id), filters],
+  employerList: (id, filters) => [...ratingKeys.lists(), 'employer', String(id), filters],
+}
+```
+
+### `submitRating({ applicationId, stars, text })`
+
+**Flow:** `RateButton` is driven by the application resource rather than by a
+separate permission request:
+
+- cleaner: appears when `application.status === 'completed'`;
+- employer: appears when `viewer_has_rated` is present, which means the job
+  post is completed for that viewer;
+- either role: disappears when `viewer_has_rated === true`.
+
+`RateModal` uses React Hook Form + Zod for an integer 1–5 star selection and
+optional review text up to 2000 characters. The API derives the reviewee; the
+client only sends the application id.
+
+```json
+{
+  "application_id": 5,
+  "stars": 5,
+  "text": "Clear instructions and professional communication."
+}
+```
+
+After success the modal invalidates application lists/calendar, the affected
+job's applicant cache, all rating lists, and the reviewee's profile cache. That
+refreshes `viewer_has_rated`, the profile aggregate, and the review list without
+maintaining a second local source of truth.
+
+### Profile review lists
+
+`ReviewsSection` selects `getCleanerRatings` or `getEmployerRatings` from its
+`role` prop, displays the rating's job context and
+`other_side_completed` indicator, and drives `Pagination` from the standard
+metadata. `CleanerProfileView` and `EmployerProfileView` use the live
+`rating_average`/`rating_count` returned by their profile resource.
+
+## Notifications (`api/notifications.js`)
+
+| Function | Method + endpoint | Sends | Receives |
+|---|---|---|---|
+| `getNotifications(params)` | `GET /notifications` | `page`, `per_page`, optional `unread_only` normalized to `1`/`0` | `{ data, links, meta }` |
+| `markNotificationRead(id)` | `PATCH /notifications/{id}/read` | nothing | updated notification |
+| `markAllNotificationsRead()` | `PATCH /notifications/read-all` | nothing | `{ message }` |
+
+```js
+export const notificationKeys = {
+  all: ['notifications'],
+  lists: () => [...notificationKeys.all, 'list'],
+  list: (filters) => [...notificationKeys.lists(), filters],
+}
+```
+
+### Notification row
+
+The backend flattens event data, so the client reads one object directly:
+
+```json
+{
+  "id": "2f0e87a1-7b93-4f55-9f25-a8e49cc80df0",
+  "type": "application_accepted",
+  "message": "Your application for \"Hotel Housekeeping Team\" was accepted.",
+  "application_id": 5,
+  "cleaning_job_post_id": 8,
+  "read_at": null,
+  "created_at": "2026-08-14T08:00:00.000000Z"
+}
+```
+
+`notificationTargetPath` maps accepted/rejected/reminder events to the current
+cleaner's sidebar-preserving job detail route, and new-applicant/withdrawal
+events to the employer's applicant list.
+
+### Bell and full page
+
+`NotificationBell` queries `{ unread_only: true }` every 30 seconds. It uses
+`meta.total` for the badge (display-capped at `9+`) and renders unread rows in a
+body portal so the sidebar cannot clip the dropdown. The full
+`NotificationsPage` uses the same row component with ordinary pagination.
+
+Clicking a row marks it read when necessary and navigates immediately to its
+target. The unread cache is reduced optimistically after the mark-one response,
+then all notification-list queries are invalidated. Mark-all invalidates the
+same key family so the bell and page converge on the server state.
