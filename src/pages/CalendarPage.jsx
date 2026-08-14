@@ -21,9 +21,9 @@ export default function CalendarPage() {
         <h1>Calendar</h1>
       </div>
 
-      <p className="mt-2 text-sm text-muted">Jobs you've been accepted for, and jobs you've completed.</p>
+      <p className="text-sm text-muted">Jobs you've been accepted for, and jobs you've completed.</p>
 
-      <div className="mt-6">
+      <div className="mt-2">
         {isPending ? (
           <p className="text-muted">Loading your calendar…</p>
         ) : isError ? (

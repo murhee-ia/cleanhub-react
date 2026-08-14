@@ -35,7 +35,11 @@ export default function RateModal({ application, jobPostId, open, onClose }) {
 
   const mutation = useMutation({
     mutationFn: (values) =>
-      submitRating({ applicationId: application.id, stars: values.stars, text: values.text }),
+      submitRating({
+        applicationId: application.id,
+        stars: values.stars,
+        text: values.text
+      }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: applicationKeys.lists() })
       queryClient.invalidateQueries({ queryKey: applicationKeys.calendar() })

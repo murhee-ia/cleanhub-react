@@ -37,8 +37,8 @@ export async function applyToJob({ cleaningJobPostId, message, resume }) {
   return data
 }
 
-// The cleaner's accepted/completed applications for the calendar view (spec
-// 4.9). Unpaginated — a month view needs every accepted/completed job at
+// The cleaner's accepted/completed applications for the calendar view
+// Unpaginated — a month view needs every accepted/completed job at
 // once — and returned as a bare array, not the usual { data, meta } envelope,
 // since there's no pagination to describe.
 export async function getCalendarEvents() {
@@ -84,5 +84,15 @@ export async function rejectApplication(id, message) {
 // `note` may be null, which is how the employer clears a saved note.
 export async function updateApplicationNote(id, note) {
   const { data } = await api.patch(`/applications/${id}/note`, { note })
+  return data
+}
+
+// The cleaner marks their side of the job as complete by uploading a proof
+// file (photo or PDF). The backend stores the file and transitions the
+// application status to `completed`, unlocking the cleaner's ability to rate.
+export async function completeApplication(id, proofFile) {
+  const payload = new FormData()
+  payload.append('proof', proofFile)
+  const { data } = await api.post(`/applications/${id}/complete`, payload)
   return data
 }

@@ -539,7 +539,7 @@ textarea:focus {
   }
 }
 
-/* FullCalendar neo-brutalist skin (cleaner calendar, Phase 6) */
+/* FullCalendar neo-brutalist skin (cleaner calendar) */
 .fc {
   font-family: var(--font-sans);
   --fc-border-color: var(--border-soft);
@@ -589,15 +589,190 @@ textarea:focus {
   box-shadow: var(--shadow-btn-sm);
 }
 
-.fc-event {
+.fc .fc-event {
   border-radius: var(--radius);
-  border-width: 1.5px;
+  border: 1.5px solid var(--color-foreground);
   cursor: pointer;
   font-size: 0.75rem;
-  padding: 1px 4px;
+  padding: 2px 5px;
+  color: var(--color-foreground);
+  transition: filter 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.fc .fc-event.calendar-event--accepted {
+  background-color: var(--color-primary-subtle);
+  border-color: var(--color-foreground);
+  color: var(--color-foreground);
+}
+
+.fc .fc-event.calendar-event--completed {
+  background-color: var(--color-highlight);
+  border-color: var(--color-foreground);
+  color: var(--color-foreground);
+}
+
+.fc .fc-event:hover,
+.fc .fc-event:focus-visible {
+  z-index: 5;
+  filter: saturate(1.08);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-btn-sm);
+  color: var(--color-foreground);
+}
+
+.fc .fc-event:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.fc .fc-event .fc-event-main,
+.fc .fc-event .fc-event-time,
+.fc .fc-event .fc-event-title {
+  color: inherit;
+}
+
+.calendar-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-bottom: 16px;
+  color: var(--color-foreground);
+  font-family: var(--heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.calendar-legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.calendar-legend small {
+  color: var(--color-muted);
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.calendar-legend__swatch {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--color-foreground);
+  border-radius: 3px;
+}
+
+.calendar-legend__swatch--accepted {
+  background: var(--color-primary-subtle);
+}
+
+.calendar-legend__swatch--completed {
+  background: var(--color-highlight);
+}
+
+.calendar-event-tooltip {
+  position: fixed;
+  z-index: 1000;
+  width: min(280px, calc(100vw - 24px));
+  padding: 12px;
+  border: 2px solid var(--color-foreground);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  color: var(--color-foreground);
+  pointer-events: none;
+}
+
+.calendar-event-tooltip--above {
+  transform: translate(-50%, -100%);
+}
+
+.calendar-event-tooltip--below {
+  transform: translateX(-50%);
+}
+
+.calendar-event-tooltip__heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.calendar-event-tooltip__heading p {
+  font-family: var(--heading);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.calendar-event-tooltip__status {
+  flex: none;
+  padding: 2px 6px;
+  border: 1.5px solid var(--color-foreground);
+  border-radius: 999px;
+  font-family: var(--heading);
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.calendar-event-tooltip__status--accepted {
+  background: var(--color-primary-subtle);
+}
+
+.calendar-event-tooltip__status--completed {
+  background: var(--color-highlight);
+}
+
+.calendar-event-tooltip__details {
+  display: grid;
+  gap: 5px;
+  margin: 9px 0 0;
+}
+
+.calendar-event-tooltip__details > div {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  align-items: start;
+  gap: 8px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.calendar-event-tooltip__details svg {
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+  color: var(--color-primary);
+}
+
+.calendar-event-tooltip__details dd {
+  grid-column: 2;
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.calendar-event-tooltip__hint {
+  margin-top: 9px;
+  color: var(--color-muted);
+  font-size: 0.6875rem;
+  font-weight: 600;
 }
 
 @media (max-width: 639px) {
+  .calendar-legend {
+    gap: 6px 12px;
+  }
+
+  .calendar-legend small {
+    flex-basis: 100%;
+  }
+
   .fc .fc-toolbar {
     flex-direction: column;
     align-items: stretch;

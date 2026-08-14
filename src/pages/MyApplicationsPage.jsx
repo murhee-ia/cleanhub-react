@@ -79,6 +79,7 @@ export default function MyApplicationsPage() {
             <JobCard
               key={job.id}
               job={job}
+              hideJobStatus
               footer={<ApplicationCardFooter application={byJobId.get(job.id)} />}
             />
           )}

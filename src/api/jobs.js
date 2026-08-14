@@ -56,3 +56,22 @@ export async function updateJobStatus(id, status) {
   const { data } = await api.patch(`/cleaning-job-posts/${id}`, { status })
   return data
 }
+
+// Publish a draft post (employer-only). Patches `visibility` from `draft` to
+// `published`, making the post visible to cleaners and guests. 
+// Returns the updated job.
+export async function publishJob(id) {
+  const { data } = await api.patch(`/cleaning-job-posts/${id}`, { visibility: 'published' })
+  return data
+}
+
+// Mark a job post as completed with a required proof file (photo or PDF).
+// The backend validates the file before accepting the status transition.
+// Uses multipart/form-data because of the file upload.
+export async function completeJobPost(id, proofFile) {
+  const payload = new FormData()
+  payload.append('status', 'completed')
+  payload.append('completion_proof', proofFile)
+  const { data } = await api.patch(`/cleaning-job-posts/${id}`, payload)
+  return data
+}

@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react'
 import { AuthContext } from './authContext'
 import { login as apiLogin, logout as apiLogout, register as apiRegister } from '../api/auth'
+import { queryClient } from '../lib/queryClient'
 
 const TOKEN_KEY = 'access_token'
 const USER_KEY = 'auth_user'
@@ -20,6 +21,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(readStoredUser)
 
   const persistSession = useCallback((data) => {
+    queryClient.clear()
     localStorage.setItem(TOKEN_KEY, data.token)
     localStorage.setItem(USER_KEY, JSON.stringify(data.user))
     setToken(data.token)
@@ -39,6 +41,7 @@ export function AuthProvider({ children }) {
 
   const logout = useCallback(async () => {
     await apiLogout().catch(() => {}) // server-side revocation is best-effort
+    queryClient.clear()
     localStorage.removeItem(TOKEN_KEY)
     localStorage.removeItem(USER_KEY)
     setToken(null)

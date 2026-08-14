@@ -34,7 +34,7 @@ export default function GuestJobFeed() {
         isError={isError}
         jobs={jobs}
         emptyMessage="No jobs available right now."
-        hideStatus
+        hideJobStatus
       />
       {meta && (
         <div className="mt-8">
