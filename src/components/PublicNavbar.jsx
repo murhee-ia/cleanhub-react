@@ -1,133 +1,81 @@
-/**
- * PublicNavbar — sticky top navigation for guest / public pages.
- * Shows the CleanHub brand, nav links, and Log in / Sign up CTAs.
- */
-import { Link, NavLink } from 'react-router-dom'
+import { Menu, Sparkles, X } from 'lucide-react'
+import { useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 
-const NAV_LINKS = [
-  { to: '/jobs',    label: 'Browse Jobs'  },
-  { to: '/how',     label: 'How it works' },
+const SECTION_LINKS = [
+  { to: '/#how-it-works', label: 'How it works' },
+  { to: '/#features', label: 'Features' },
+  { to: '/#about', label: 'About' },
+  { to: '/#faq', label: 'FAQs' },
 ]
 
 export default function PublicNavbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { pathname } = useLocation()
+
+  function closeMenu() {
+    setIsMenuOpen(false)
+  }
+
   return (
     <header className="public-navbar">
-      {/* Brand */}
-      <Link
-        to="/"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          textDecoration: 'none',
-          flexShrink: 0,
-        }}
-        aria-label="CleanHub home"
-      >
-        <div
-          style={{
-            width: '36px',
-            height: '36px',
-            background: 'var(--color-highlight)',
-            borderRadius: 'var(--radius)',
-            border: '2px solid rgba(255,255,255,0.35)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontFamily: 'var(--heading)',
-            fontWeight: 700,
-            fontSize: '13px',
-            color: 'var(--color-primary)',
-            flexShrink: 0,
-          }}
-          aria-hidden="true"
-        >
-          CH
-        </div>
-        <span
-          style={{
-            fontFamily: 'var(--heading)',
-            fontWeight: 700,
-            fontSize: '17px',
-            color: '#ffffff',
-            letterSpacing: '-0.2px',
-          }}
-        >
-          CleanHub
+      <Link className="public-navbar__brand" to="/" onClick={closeMenu} aria-label="CleanHub home">
+        <span className="public-navbar__mark" aria-hidden="true">
+          <Sparkles size={18} strokeWidth={2.5} />
         </span>
+        <span>CleanHub</span>
       </Link>
 
-      {/* Center nav */}
-      <nav
-        style={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '4px',
-        }}
-        aria-label="Public navigation"
-      >
-        {NAV_LINKS.map(({ to, label }) => (
-          <NavLink
-            key={to}
-            to={to}
-            className={({ isActive }) =>
-              `px-4 py-1.5 rounded text-sm font-semibold transition ${
-                isActive
-                  ? 'bg-highlight text-primary'
-                  : 'text-white/80 hover:text-white hover:bg-white/10'
-              }`
-            }
-            style={{ fontFamily: 'var(--heading)', borderRadius: 'var(--radius)', textDecoration: 'none' }}
-          >
-            {label}
-          </NavLink>
+      <nav className="public-navbar__desktop-nav" aria-label="Public navigation">
+        <NavLink
+          to="/jobs"
+          className={({ isActive }) => `public-navbar__link${isActive ? ' is-active' : ''}`}
+        >
+          Browse jobs
+        </NavLink>
+        {SECTION_LINKS.map((link) => (
+          <a className="public-navbar__link" href={pathname === '/' ? link.to.slice(1) : link.to} key={link.to}>
+            {link.label}
+          </a>
         ))}
       </nav>
 
-      {/* Auth CTAs */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-        <Link
-          to="/login"
-          id="public-login-btn"
-          style={{
-            fontFamily: 'var(--heading)',
-            fontWeight: 600,
-            fontSize: '14px',
-            color: '#ffffff',
-            textDecoration: 'none',
-            padding: '7px 16px',
-            border: '2px solid rgba(255,255,255,0.5)',
-            borderRadius: 'var(--radius)',
-            transition: 'border-color 0.12s, background 0.12s',
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#ffffff'; e.currentTarget.style.background = 'rgba(255,255,255,0.08)' }}
-          onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; e.currentTarget.style.background = 'transparent' }}
-        >
+      <div className="public-navbar__actions">
+        <Link className="public-navbar__login" to="/login">
           Log in
         </Link>
-        <Link
-          to="/register"
-          id="public-signup-btn"
-          style={{
-            fontFamily: 'var(--heading)',
-            fontWeight: 700,
-            fontSize: '14px',
-            color: 'var(--color-primary)',
-            textDecoration: 'none',
-            padding: '7px 16px',
-            background: 'var(--color-highlight)',
-            border: '2px solid var(--border)',
-            borderRadius: 'var(--radius)',
-            boxShadow: 'var(--shadow-btn-sm)',
-            transition: 'box-shadow 0.12s, transform 0.12s',
-          }}
-          onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '1px 1px 0 #1a1a1a'; e.currentTarget.style.transform = 'translate(1px,1px)' }}
-          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'var(--shadow-btn-sm)'; e.currentTarget.style.transform = 'none' }}
-        >
-          Sign up
+        <Link className="public-navbar__signup" to="/register">
+          Join CleanHub
         </Link>
+      </div>
+
+      <button
+        className="public-navbar__menu-button"
+        type="button"
+        aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+        aria-expanded={isMenuOpen}
+        aria-controls="public-mobile-menu"
+        onClick={() => setIsMenuOpen((open) => !open)}
+      >
+        {isMenuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+      </button>
+
+      <div
+        className={`public-navbar__mobile-menu${isMenuOpen ? ' is-open' : ''}`}
+        id="public-mobile-menu"
+      >
+        <nav aria-label="Mobile public navigation">
+          <NavLink to="/jobs" onClick={closeMenu}>Browse jobs</NavLink>
+          {SECTION_LINKS.map((link) => (
+            <a href={pathname === '/' ? link.to.slice(1) : link.to} key={link.to} onClick={closeMenu}>
+              {link.label}
+            </a>
+          ))}
+        </nav>
+        <div className="public-navbar__mobile-actions">
+          <Link to="/login" onClick={closeMenu}>Log in</Link>
+          <Link to="/register" onClick={closeMenu}>Join CleanHub</Link>
+        </div>
       </div>
     </header>
   )
