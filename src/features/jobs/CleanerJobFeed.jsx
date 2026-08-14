@@ -77,6 +77,7 @@ export default function CleanerJobFeed() {
 
   const jobs = data?.data ?? []
   const meta = data?.meta
+  const hasSearchQuery = Boolean(filters.search)
 
   const hasActiveFilters =
     Boolean(draft.search || draft.country || draft.city) ||
@@ -113,7 +114,7 @@ export default function CleanerJobFeed() {
           isError={isError}
           jobs={jobs}
           emptyMessage="No jobs found."
-          hideJobStatus
+          hideJobStatus={!hasSearchQuery}
         />
       </div>
 
