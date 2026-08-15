@@ -9,7 +9,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 import HomePage from './pages/HomePage'
 import JobsPage from './pages/JobsPage'
 import JobDetailPage from './pages/JobDetailPage'
-import PlaceholderPage from './pages/PlaceholderPage'
+import EmployerDashboardPage from './pages/EmployerDashboardPage'
 import NotFoundPage from './pages/NotFoundPage'
 import NotAllowedPage from './pages/NotAllowedPage'
 import ProfileViewPage from './pages/ProfileViewPage'
@@ -100,7 +100,7 @@ export const router = createBrowserRouter([
           {
             element: <EmployerLayout />,
             children: [
-              { index: true, element: <PlaceholderPage title="Employer dashboard" /> },
+              { index: true, element: <EmployerDashboardPage /> },
               { path: 'notifications', element: <NotificationsPage /> },
               { path: 'profile', element: <OwnProfilePage view="profile" /> },
               { path: 'profile/edit', element: <OwnProfilePage view="edit" /> },
