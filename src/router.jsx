@@ -6,6 +6,7 @@ import EmployerLayout from './layouts/EmployerLayout'
 import ModeratorLayout from './layouts/ModeratorLayout'
 import AdminLayout from './layouts/AdminLayout'
 import ProtectedRoute from './components/ProtectedRoute'
+import GuestOnlyRoute from './components/GuestOnlyRoute'
 import HomePage from './pages/HomePage'
 import JobsPage from './pages/JobsPage'
 import JobDetailPage from './pages/JobDetailPage'
@@ -39,11 +40,43 @@ export const router = createBrowserRouter([
   {
     element: <RootLayout />,
     children: [
-      // Public
-      { path: '/', element: <HomePage /> },
+      // Public — but the landing page is guest-only; a signed-in user is
+      // bounced to their role home instead (see GuestOnlyRoute).
+      {
+        element: <GuestOnlyRoute />,
+        children: [{ path: '/', element: <HomePage /> }],
+      },
       { path: '/jobs', element: <JobsPage /> },
       { path: '/jobs/:id', element: <JobDetailPage /> },
       { path: '/not-allowed', element: <NotAllowedPage /> },
+
+      // Auth Layout (centered card frame). Login/register/forgot-password/reset-
+      // password are all guest-only — a signed-in user is bounced to their
+      // role home (forgot/reset-password is a self-contained, unauthenticated
+      // flow end to end: the reset link carries its own token and never
+      // signs the user in, per NewPasswordController). Verify-email is the
+      // opposite — only an already-authenticated, not-yet-verified user
+      // lands there (registering signs the user in before email verification
+      // completes); the emailed verification link itself is a backend-only
+      // signed URL that never touches this page.
+      {
+        element: <AuthLayout />,
+        children: [
+          {
+            element: <GuestOnlyRoute />,
+            children: [
+              { path: '/login', element: <LoginPage /> },
+              { path: '/register', element: <RegisterPage /> },
+              { path: '/forgot-password', element: <ForgotPasswordPage /> },
+              { path: '/reset-password', element: <ResetPasswordPage /> },
+            ],
+          },
+          {
+            element: <ProtectedRoute />,
+            children: [{ path: '/verify-email', element: <VerifyEmailPage /> }],
+          },
+        ],
+      },
 
       // Any authenticated user can view another user's profile. Cleaner and
       // employer also get sidebar-preserving copies nested below; this is the
@@ -55,18 +88,6 @@ export const router = createBrowserRouter([
         children: [
           { path: '/cleaners/:id', element: <ProfileViewPage role="cleaner" /> },
           { path: '/employers/:id', element: <ProfileViewPage role="employer" /> },
-        ],
-      },
-
-      // Auth (centered card frame)
-      {
-        element: <AuthLayout />,
-        children: [
-          { path: '/login', element: <LoginPage /> },
-          { path: '/register', element: <RegisterPage /> },
-          { path: '/verify-email', element: <VerifyEmailPage /> },
-          { path: '/forgot-password', element: <ForgotPasswordPage /> },
-          { path: '/reset-password', element: <ResetPasswordPage /> },
         ],
       },
 
